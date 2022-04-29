@@ -1,0 +1,704 @@
+Alarm,Text
+ALARM10015,Ionizer Imbalance Detected in Input TPS Zone value %s exceeds %s
+ALARM10016,Ionizer Decay Test Unsuccessful in Input TPS Zone
+ALARM10017,No Comm with Input TPS Zone
+ALARM10020,Ionizer Imbalance Detected in TPS 1-2 Zone value %s exceeds %s
+ALARM10021,Ionizer Decay Test Unsuccessful in TPS 1-2 Zone
+ALARM10022,No Comm with TPS 1-2 Zone
+ALARM10025,Ionizer Imbalance Detected in TPS 3-4 Zone value %s exceeds %s
+ALARM10026,Ionizer Decay Test Unsuccessful in TPS 3-4 Zone
+ALARM10027,No Comm with TPS 3-4 Zone
+ALARM10035,Ionizer Imbalance Detected in TPS 5-6 Zone value %s exceeds %s
+ALARM10036,Ionizer Decay Test Unsuccessful in TPS 5-6 Zone
+ALARM10037,No Comm with TPS 5-6 Zone
+ALARM10040,Ionizer Imbalance Detected in Testsite Zone value %s exceeds %s
+ALARM10041,Ionizer Decay Test Unsuccessful in Testsite Zone
+ALARM10042,No Comm with Testsite Zone
+ALARM10045,Ionizer Imbalance Detected in Zone6 value %s exceeds %s
+ALARM10046,Ionizer Decay Test Unsuccessful in Zone6
+ALARM10047,No Comm with Zone6
+ALARM10100,Tray Storage Undefined Alarm for %s
+ALARM10110,Failed to read the Tray presence sensor on Stack 1. Please check the sensor
+ALARM10111,Tray not detected on Stack 1
+ALARM10112,Failed to read the Tray Orientation sensor on Stack 1
+ALARM10113,"Tray Orientation Incorrect on Stack 1. Please correct the error, and clear"
+ALARM10114,Failed to read the full stack sensor for Stack 1
+ALARM10120,Failed to read the Tray presence sensor on Stack 2. Please check the sensor
+ALARM10121,Tray not detected on Stack 2
+ALARM10122,Failed to read the Tray Orientation sensor on Stack 2
+ALARM10123,"Tray Orientation Incorrect on Stack 2. Please correct the error, and clear"
+ALARM10124,Failed to read the full stack sensor for Stack 2
+ALARM10130,Failed to read the Tray presence sensor on Stack 3. Please check the sensor
+ALARM10131,Tray not detected on Stack 3
+ALARM10132,Failed to read the Tray Orientation sensor on Stack 3
+ALARM10133,"Tray Orientation Incorrect on Stack 3. Please correct the error, and clear"
+ALARM10134,Failed to read the full stack sensor for Stack 3
+ALARM10140,Failed to read the Tray presence sensor on Stack 4. Please check the sensor
+ALARM10141,Tray not detected on Stack 4
+ALARM10142,Failed to read the Tray Orientation sensor on Stack 4
+ALARM10143,"Tray Orientation Incorrect on Stack 4. Please correct the error, and clear"
+ALARM10144,Failed to read the full stack sensor for Stack 4
+ALARM10150,Failed to read the Tray presence sensor on Stack 5. Please check the sensor
+ALARM10151,Tray not detected on Stack 5
+ALARM10152,Failed to read the Tray Orientation sensor on Stack 5
+ALARM10153,"Tray Orientation Incorrect on Stack 5. Please correct the error, and clear"
+ALARM10154,Failed to read the full stack sensor for Stack 5
+ALARM10160,Failed to read the Tray presence sensor on Stack 6. Please check the sensor
+ALARM10161,Tray not detected on Stack 6
+ALARM10162,Failed to read the Tray Orientation sensor on Stack 6
+ALARM10163,"Tray Orientation Incorrect on Stack 6. Please correct the error, and clear"
+ALARM10164,Failed to read the full stack sensor for Stack 6
+ALARM10170,Failed to read the Tray presence sensor on Stack 7. Please check the sensor
+ALARM10171,Tray not detected on Stack 7
+ALARM10172,Failed to read the Tray Orientation sensor on Stack 7
+ALARM10173,"Tray Orientation Incorrect on Stack 7. Please correct the error, and clear"
+ALARM10174,Failed to read the full stack sensor for Stack 7
+ALARM10180,Failed to read the Tray presence sensor on Manual 1. Please check the sensor
+ALARM10181,Tray not detected on Manual 1
+ALARM10190,Failed to read the Tray presence sensor on Manual 2. Please check the sensor
+ALARM10191,Tray not detected on Manual 2
+ALARM10200,Failed to read the Tray presence sensor on Manual 3. Please check the sensor
+ALARM10201,Tray not detected on Manual 3
+ALARM10300,TXP Undefined Alarm
+ALARM10301,TXP ATT X-Axis unable to block Home sensor.
+ALARM10302,TXP ATT X-Axis unable to move off Home sensor.
+ALARM10303,TXP ATT X-Axis unable to Home.
+ALARM10304,TXP ATT X-Axis unable to complete move. %s
+ALARM10305,TXP ATT X-Axis unable to move to sensor. %s
+ALARM10306,TXP ATT X-Axis unable to complete drift check. %s
+ALARM10307,TXP ATT X-Axis unable to change torque.
+ALARM10309,TXP ATT X-Axis unable to read sensors.
+ALARM10311,TXP ATT Y-Axis unable to block Home sensor.
+ALARM10312,TXP ATT Y-Axis unable to move off Home sensor.
+ALARM10313,TXP ATT Y-Axis unable to Home.
+ALARM10314,TXP ATT Y-Axis unable to complete move. %s
+ALARM10315,TXP ATT Y-Axis unable to move to sensor. %s
+ALARM10316,TXP ATT Y-Axis unable to complete drift check. %s
+ALARM10317,TXP ATT Y-Axis unable to change torque.
+ALARM10319,TXP ATT Y-Axis unable to read sensors.
+ALARM10321,TXP ATT Z-Axis unable to block Home sensor.
+ALARM10322,TXP ATT Z-Axis unable to move off Home sensor.
+ALARM10323,TXP ATT Z-Axis unable to Home.
+ALARM10324,TXP ATT Z-Axis unable to complete move.
+ALARM10325,TXP ATT Z-Axis unable to move to sensor. %s
+ALARM10326,TXP ATT Z-Axis unable to complete drift check. %s
+ALARM10327,TXP ATT Z-Axis unable to change torque.
+ALARM10329,TXP ATT Z-Axis unable to read sensors. Please remove any trays from the ATT head and/or check the sensor connections.
+ALARM10330,TXP ATT unable to read tray sensors.
+ALARM10331,Unexpected tray found on the ATT Head. Please remove the tray.
+ALARM10332,"A Tested Tray is missing or not seated properly on the ATT Head. Please replace the tray, seat it properly or check the sensors. Must Unlock Handler Door for Clear option."
+ALARM10333,"Tray is missing or not seated properly on the ATT Head. Please replace the tray, seat it properly or check the sensors. Must Unlock Handler Door for Clear option. %s"
+ALARM10340,ATT unable to Open Tray Restraint
+ALARM10341,ATT unable to Close Tray Restraint
+ALARM10351,TXP ATT unable to extend Pushers or the tray singulator fingers sensor was not unblocked. %s
+ALARM10352,TXP ATT unable to retract Pushers. %s
+ALARM10365,TXP ITR unable to read tray sensor.
+ALARM10366,Unexpected tray found on the ITR. Please remove the tray.
+ALARM10367,"Tray is missing or not seated properly on the ITR. Please replace the tray, seat it properly or check the sensors. Must Unlock Handler Door for Clear option."
+ALARM10370,TXP ITR Unable to retract the X Input TPS valve while moving to Dock TPS. Please check the sensor.
+ALARM10371,TXP ITR Unable to extend the X Input TPS valve while moving to Input TPS. Please check the sensor.
+ALARM10375,TXP ITR Unable to retract the X Dock TPS valve while moving to Input TPS. Please check the sensor.
+ALARM10376,TXP ITR Unable to extend the X Dock TPS valve while moving to Dock TPS. Please check the sensor.
+ALARM10380,TXP ITR Unable to retract the Z Up valve while moving Down. Please check the sensor.
+ALARM10381,TXP ITR Unable to extend the Z Up valve while moving Up. Please check the sensor.
+ALARM10385,TXP ITR Unable to retract the Z Down valve while moving Up. Please check the sensor.
+ALARM10386,TXP ITR Unable to extend the Z Down valve while moving Down. Please check the sensor.
+ALARM10390,TXP ITR Unable to verify the clear sensor as blocked. Please check if it is plugged in.
+ALARM10395,TXP UNSAFE ACTION: Either one or more ATT axis is not homed or ATT in the way of ITR.
+ALARM10398,TXP ITR Unable to turn on the Exhaust valve.
+ALARM10399,TXP ITR Unable to turn off the Exhaust valve.
+ALARM10410,Unable to Read Unprecised Sensor on In TPS
+ALARM10411,Unable to Read Tray Sensor on In TPS
+ALARM10412,Unable to Read Orientation Sensor on In TPS
+ALARM10413,Unexpected tray found on Input TPS. Please remove the tray.
+ALARM10414,Tray is missing from Input TPS. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10415,Unable to Extend Precisor on In TPS
+ALARM10416,Unable to Retract Precisor on In TPS
+ALARM10420,Unable to Read Unprecised Sensor on TPS1
+ALARM10421,Unable to Read Tray Sensor on TPS1
+ALARM10422,Unable to Read Orientation Sensor on TPS1
+ALARM10423,Unexpected tray found on Sort TPS1. Please remove the tray.
+ALARM10424,Tray is missing from Sort TPS1. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10425,Unable to Extend Precisor on TPS1
+ALARM10426,Unable to Retract Precisor on TPS1
+ALARM10430,Unable to Read Unprecised Sensor on TPS2
+ALARM10431,Unable to Read Tray Sensor on TPS2
+ALARM10432,Unable to Read Orientation Sensor on TPS2
+ALARM10433,Unexpected tray found on Sort TPS2. Please remove the tray.
+ALARM10434,Tray is missing from Sort TPS2. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10435,Unable to Extend Precisor on TPS2
+ALARM10436,Unable to Retract Precisor on TPS2
+ALARM10440,Unable to Read Unprecised Sensor on TPS3
+ALARM10441,Unable to Read Tray Sensor on TPS3
+ALARM10442,Unable to Read Orientation Sensor on TPS3
+ALARM10443,Unexpected tray found on Sort TPS3. Please remove the tray.
+ALARM10444,Tray is missing from Sort TPS3. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10445,Unable to Extend Precisor on TPS3
+ALARM10446,Unable to Retract Precisor on TPS3
+ALARM10450,Unable to Read Unprecised Sensor on TPS4
+ALARM10451,Unable to Read Tray Sensor on TPS4
+ALARM10452,Unable to Read Orientation Sensor on TPS4
+ALARM10453,Unexpected tray found on Sort TPS4. Please remove the tray.
+ALARM10454,Tray is missing from Sort TPS4. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10455,Unable to Extend Precisor on TPS4
+ALARM10456,Unable to Retract Precisor on TPS4
+ALARM10460,Unable to Read Unprecised Sensor on TPS5
+ALARM10461,Unable to Read Tray Sensor on TPS5
+ALARM10462,Unable to Read Orientation Sensor on TPS5
+ALARM10463,Unexpected tray found on Sort TPS5. Please remove the tray.
+ALARM10464,Tray is missing from Sort TPS5. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10465,Unable to Extend Precisor on TPS5
+ALARM10466,Unable to Retract Precisor on TPS5
+ALARM10470,Unable to Read Unprecised Sensor on TPS6
+ALARM10471,Unable to Read Tray Sensor on TPS6
+ALARM10472,Unable to Read Orientation Sensor on TPS6
+ALARM10473,Unexpected tray found on Sort TPS6. Please remove the tray.
+ALARM10474,Tray is missing from Sort TPS6. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10475,Unable to Extend Precisor on TPS6
+ALARM10476,Unable to Retract Precisor on TPS6
+ALARM10481,Unable to Read Tray Sensor on Dock TPS
+ALARM10483,Unexpected tray found on Dock or Input TPS 2. Please remove the tray.
+ALARM10484,Tray is missing from Dock or Input 2 TPS. Please replace the tray.Must Unlock Handler Door for Clear option.
+ALARM10485,Unable to extend precisor on Input TPS 2
+ALARM10490,Unsafe ATT Z Position.Please empty stack %s. Must Unlock TPS doors.
+ALARM10491,Unsafe ATT Z Position.Please remove tray from ATT head. Must Unlock TPS doors.
+ALARM10492,Detected ATT Head Misalignment.Verify ATT head and teach Y-Rotation sensor positions.
+ALARM10493,"ATT Z Sensor state Unsafe for Travel. Sensors Z1,Z2,Z3 must be Unblocked at Upper Travel.Please Unlock the doors and fix the Upper Travel position."
+ALARM10500,Input PnP Undefined Alarm
+ALARM10501,Input PnP X-Axis unable to block Home sensor.
+ALARM10502,Input PnP X-Axis unable to move off Home sensor.
+ALARM10503,Input PnP X-Axis unable to Home.
+ALARM10504,Input PnP X-Axis unable to complete move. %s
+ALARM10506,Input PnP X-Axis unable to complete drift check.
+ALARM10507,Input PnP X-Axis unable to change torque.
+ALARM10511,Input PnP Y-Axis unable to block Home sensor.
+ALARM10512,Input PnP Y-Axis unable to move off Home sensor.
+ALARM10513,Input PnP Y-Axis unable to Home.
+ALARM10514,Input PnP Y-Axis unable to complete move. %s
+ALARM10516,Input PnP Y-Axis unable to complete drift check.
+ALARM10517,Input PnP Y-Axis unable to change torque.
+ALARM10521,Input PnP Z-Axis unable to block Home sensor.
+ALARM10522,Input PnP Z-Axis unable to move off Home sensor.
+ALARM10523,Input PnP Z-Axis unable to Home.
+ALARM10524,Input PnP Z-Axis unable to complete move. %s
+ALARM10526,Input PnP Z-Axis unable to complete drift check.
+ALARM10527,Input PnP Z-Axis unable to change torque.
+ALARM10531,Input PnP X-PitchB Axis unable to block Home sensor.
+ALARM10532,Input PnP X-PitchB Axis unable to move off Home sensor.
+ALARM10533,Input PnP X-PitchB Axis unable to Home.
+ALARM10534,Input PnP X-PitchB Axis unable to complete move. %s %s
+ALARM10536,Input PnP X-PitchB Axis unable to complete drift check. %s %s
+ALARM10537,Input PnP X-PitchB Axis unable to change torque.
+ALARM10541,Input PnP X-Pitch Axis unable to block Home sensor.
+ALARM10542,Input PnP X-Pitch Axis unable to move off Home sensor.
+ALARM10543,Input PnP X-Pitch Axis unable to Home.
+ALARM10544,Input PnP X-Pitch Axis unable to complete move.
+ALARM10546,Input PnP X-Pitch Axis unable to complete drift check.
+ALARM10547,Input PnP X-Pitch Axis unable to change torque.
+ALARM10551,Input PnP Y-Pitch Axis unable to block Home sensor.
+ALARM10552,Input PnP Y-Pitch Axis unable to move off Home sensor.
+ALARM10553,Input PnP Y-Pitch Axis unable to Home.
+ALARM10554,Input PnP Y-Pitch Axis unable to complete move.
+ALARM10556,Input PnP Y-Pitch Axis unable to complete drift check.
+ALARM10557,Input PnP Y-Pitch Axis unable to change torque.
+ALARM10560,Input PnP pick operation unable to pick up parts on Z-Head(s) %s at %s.
+ALARM10561,Input PnP unexpected part found on Z-Head(s) %s before pick operation at %s.
+ALARM10562,"Input PnP parts not found on Z-Head(s) %s, after Z-Heads raise on a pick operation at %s."
+ALARM10563,Input PnP place operation unable to place parts on Z-Head(s) %s at %s.
+ALARM10564,"Input PnP unexpected parts found on Z-Head(s) %s, before the place operation at %s."
+ALARM10565,Input PnP parts not found on Z-Head(s) %s before Z-Axis goes down for place operation at %s.
+ALARM10566,Input PnP unable to enable clutch for Z-Head(s) %s.
+ALARM10567,Input PnP unable to disable clutch for Z-Head(s) %s.
+ALARM10568,Input PnP detected part present mismatch on Z-Head(s) %s during recovery.
+ALARM10569,Input PnP clutch in wrong state for Z-Head(s) %s.
+ALARM10571,Input PnP auto teach unable to find edge of fixture hole.
+ALARM10572,Input PnP auto teach either tip(s) not positioned over fixture hole or full vacuum is too low.
+ALARM10573,"Input PnP auto teach failed to find z reference position within 0.75"""
+ALARM10574,Input PnP auto teach failed to find at least 4inHg when attempting to validate full vac
+ALARM10575,"Input PnP auto teach failed, Planarity issue, not all nests found full vac within 0.060"" (1.524mm) of each other"
+ALARM10700,Boat Xport Undefined Alarm
+ALARM10701,Boat Xport Conveyor unable to block Home sensor.
+ALARM10702,Boat Xport Conveyor unable to move off Home sensor.
+ALARM10703,Boat Xport Conveyor failed to home.
+ALARM10704,Boat Xport Conveyor failed to move boat to transfer stack.
+ALARM10705,Boat Xport Conveyor unable to move to sensor. %s
+ALARM10706,Boat Xport Conveyor unable to check reset home. %s
+ALARM10707,Boat Xport Conveyor unable to change torque.
+ALARM10711,Boat Xport Conveyor unable to read boat sensor at the Input.
+ALARM10712,Boat Xport Conveyor unable to read boat sensor at the Middle.
+ALARM10713,Boat Xport Conveyor unable to read boat sensor at the Output.
+ALARM10714,Boat Xport Conveyor is missing the boat at Input.
+ALARM10715,Boat Xport Conveyor is missing the boat at Middle.
+ALARM10716,Boat Xport Conveyor is missing the boat at Output.
+ALARM10717,Boat Xport Conveyor found unexpected boat at Input.
+ALARM10718,Boat Xport Conveyor found unexpected boat at Middle.
+ALARM10719,Boat Xport Conveyor found unexpected boat at Output.
+ALARM10721,Boat Xport Indexer1 y-axis unable to block Home sensor.
+ALARM10722,Boat Xport Indexer1 y-axis unable to move off Home sensor.
+ALARM10723,Boat Xport Indexer1 y-axis failed to home.
+ALARM10724,Boat Xport Indexer1 y-axis failed to move. %s
+ALARM10725,Boat Xport Indexer1 y-axis unable to move to sensor. %s
+ALARM10726,Boat Xport Indexer1 y-axis unable to complete drift check. %s
+ALARM10727,Boat Xport Indexer1 y-axis unable to change torque.
+ALARM10735,Boat Xport Indexer1 unable to read BPS inputs.
+ALARM10736,Boat Xport Indexer1 unable to verify BPS inputs for open status.
+ALARM10737,Boat Xport Indexer1 unable to verify BPS inputs for boat retained.
+ALARM10738,Boat Xport Indexer1 unable to verify BPS inputs for boat precised.
+ALARM10739,Boat Xport Indexer1 unable to verify BPS inputs for boat absent.
+ALARM10745,Boat Xport Indexer1 failed to set BPS outputs.
+ALARM10746,Boat Xport Indexer1 failed to clear BPS outputs.
+ALARM10751,Boat Xport Indexer2 Z-Motor unable to block Home Sensor.
+ALARM10752,Boat Xport Indexer2 Z-Motor unable to move off Home Sensor.
+ALARM10753,Boat Xport Indexer2 Z-Motor unable to home.
+ALARM10754,Boat Xport Indexer2 Z-Motor unable to move.
+ALARM10755,Boat Xport Indexer2 Z-Motor unable to move to sensor.
+ALARM10756,Boat Xport Indexer2 Z-Motor unable to complete drift check.
+ALARM10757,Boat Xport Indexer2 Z-Motor unable to change torque.
+ALARM10761,Boat Xport Indexer2 y-axis unable to block Home sensor.
+ALARM10762,Boat Xport Indexer2 y-axis unable to move off Home sensor.
+ALARM10763,Boat Xport Indexer2 y-axis failed to home.
+ALARM10764,Boat Xport Indexer2 y-axis failed to move. %s
+ALARM10765,Boat Xport Indexer2 y-axis unable to move to sensor. %s
+ALARM10766,Boat Xport Indexer2 y-axis unable to complete drift check. %s
+ALARM10767,Boat Xport Indexer2 y-axis unable to change torque.
+ALARM10775,Boat Xport Indexer2 unable to read BPS inputs.
+ALARM10776,Boat Xport Indexer2 unable to verify BPS inputs for open status.
+ALARM10777,Boat Xport Indexer2 unable to verify BPS inputs for boat retained.
+ALARM10778,Boat Xport Indexer2 unable to verify BPS inputs for boat precised.
+ALARM10779,Boat Xport Indexer2 unable to verify BPS inputs for boat absent.
+ALARM10785,Boat Xport Indexer2 failed to set BPS outputs.
+ALARM10786,Boat Xport Indexer2 failed to clear BPS outputs.
+ALARM10795,Boat Xport Indexer2 z-axis failed to extend
+ALARM10796,Boat Xport Indexer2 z-axis failed to retract
+ALARM10801,Boat Xport Input Stack Z-axis unable to block Home sensor.
+ALARM10802,Boat Xport Input Stack Z-axis unable to move off Home sensor.
+ALARM10803,Boat Xport Input Stack Z-axis failed to home.
+ALARM10804,Boat Xport Input Stack Z-axis failed to move. %s
+ALARM10805,Boat Xport Input Stack Z-axis unable to move to sensor. %s
+ALARM10806,Boat Xport Input Stack Z-axis unable to complete drift check. %s
+ALARM10807,Boat Xport Input Stack Z-axis unable to change torque.
+ALARM10815,Boat Xport unable to read Input Stack Boat level sensor.
+ALARM10816,Boat Xport unable to block Input Stack Boat level sensor.
+ALARM10817,Boat Xport unable to unblock Input Stack Boat level sensor.
+ALARM10818,Stack move halted at the stack level sensor for mechanism safety. Please issue incremental moves to reach the desired position  
+ALARM10819,Boat Xport Input Stack Boat level sensor blocked preventing Indexer move. %s 
+ALARM10820,Boat Xport Input Stack retainer failed to extend
+ALARM10821,Boat Xport Input Stack retainer failed to retract
+ALARM10822,Boat Xport Input Stack retainer failed to read actuator inputs.
+ALARM10826,Boat Xport Output Stack Z-axis unable to block Home sensor.
+ALARM10827,Boat Xport Output Stack Z-axis unable to move off Home sensor.
+ALARM10828,Boat Xport Output Stack Z-axis failed to home.
+ALARM10829,Boat Xport Output Stack Z-axis failed to move. %s
+ALARM10830,Boat Xport Output Stack Z-axis unable to move to sensor. %s
+ALARM10831,Boat Xport Output Stack Z-axis unable to complete drift check. %s
+ALARM10832,Boat Xport Output Stack Z-axis unable to change torque.
+ALARM10840,Boat Xport unable to read Output Stack Boat level sensor.
+ALARM10841,Boat Xport unable to block Output Stack Boat level sensor.
+ALARM10842,Boat Xport unable to unblock Output Stack Boat level sensor.
+ALARM10844,Boat Xport Output Stack Boat level sensor blocked preventing Indexer move. %s  
+ALARM10845,Boat Xport Output Stack retainer failed to extend
+ALARM10846,Boat Xport Output Stack retainer failed to retract
+ALARM10847,Boat Xport Output Stack retainer failed to read actuator inputs.
+ALARM10850,Boat Xport Access Doors failed to open door at Input
+ALARM10860,Boat Xport Access Doors failed to close door at Input
+ALARM10870,Boat Xport Access Doors failed to open door at Output
+ALARM10880,Boat Xport Access Doors failed to close door at Output
+ALARM10900,Transfer PnP Undefined Alarm
+ALARM10901,Transfer PnP X-Axis unable to block Home sensor.
+ALARM10902,Transfer PnP X-Axis unable to move off Home sensor.
+ALARM10903,Transfer PnP X-Axis unable to Home.
+ALARM10904,Transfer PnP X-Axis unable to complete move. %s
+ALARM10906,Transfer PnP X-Axis unable to complete drift check.
+ALARM10907,Transfer PnP X-Axis unable to change torque.
+ALARM10909,Transfer Pnp X-Axis failed to enable trigger for 2DID scanning.
+ALARM10921,Transfer PnP Z-Axis unable to block Home sensor.
+ALARM10922,Transfer PnP Z-Axis unable to move off Home sensor.
+ALARM10923,Transfer PnP Z-Axis unable to Home.
+ALARM10924,Transfer PnP Z-Axis unable to complete move. %s
+ALARM10926,Transfer PnP Z-Axis unable to complete drift check.
+ALARM10927,Transfer PnP Z-Axis unable to change torque.
+ALARM10931,Transfer PnP X-PitchB Axis unable to block Home sensor.
+ALARM10932,Transfer PnP X-PitchB Axis unable to move off Home sensor.
+ALARM10933,Transfer PnP X-PitchB Axis unable to Home.
+ALARM10934,Transfer PnP X-PitchB Axis unable to complete move. %s %s
+ALARM10936,Transfer PnP X-PitchB Axis unable to complete drift check. %s %s
+ALARM10937,Transfer PnP X-PitchB Axis unable to change torque.
+ALARM10941,Transfer PnP X-Pitch Axis unable to block Home sensor.
+ALARM10942,Transfer PnP X-Pitch Axis unable to move off Home sensor.
+ALARM10943,Transfer PnP X-Pitch Axis unable to Home.
+ALARM10944,Transfer PnP X-Pitch Axis unable to complete move. %s
+ALARM10946,Transfer PnP X-Pitch Axis unable to complete drift check.
+ALARM10947,Transfer PnP X-Pitch Axis unable to change torque.
+ALARM10951,Transfer PnP Y-Pitch Axis unable to block Home sensor.
+ALARM10952,Transfer PnP Y-Pitch Axis unable to move off Home sensor.
+ALARM10953,Transfer PnP Y-Pitch Axis unable to Home.
+ALARM10954,Transfer PnP Y-Pitch Axis unable to complete move. %s
+ALARM10956,Transfer PnP Y-Pitch Axis unable to complete drift check.
+ALARM10957,Transfer PnP Y-Pitch Axis unable to change torque.
+ALARM10960,Transfer PnP pick operation unable to pick up parts on Z-Head(s) %s at %s.
+ALARM10961,"Transfer PnP unexpected part found on Z-Head(s) %s, before pick operation at %s."
+ALARM10962,"Transfer PnP parts not found on Z-Head(s) %s, after Z-Heads raise on a pick operation at %s."
+ALARM10963,Transfer PnP place operation unable to place parts on Z-Head(s) %s at %s.
+ALARM10964,"Transfer PnP unexpected parts found on Z-Head(s) %s, before the place operation at %s."
+ALARM10965,Transfer PnP parts not found on Z-Head(s) %s before Z-Axis goes down for place operation at %s.
+ALARM10966,Transfer PnP unable to enable clutch for Z-Head(s) %s.
+ALARM10967,Transfer PnP unable to disable clutch for Z-Head(s) %s.
+ALARM10968,Transfer PnP detected part present mismatch on Z-Head(s) %s during recovery.
+ALARM10969,Transfer PnP clutch in wrong state for Z-Head(s) %s.
+ALARM10971,Transfer PnP auto teach unable to find edge of fixture hole.
+ALARM10972,Transfer PnP auto teach either tip(s) not positioned over fixture hole or full vacuum is too low.
+ALARM10973,"Transfer PnP auto teach failed to find z reference position within 0.75"""
+ALARM10974,Transfer PnP auto teach failed to find at least 4inHg when attempting to validate full vac
+ALARM10975,"Transfer PnP auto teach failed, Planarity issue, not all nests found full vac within 0.060"" (1.524mm) of each other"
+ALARM11013,Transfer Pnp unable to read device identifier while scanning shuttle.   Results may be entered by hand from the Vision application.
+ALARM11014,Transfer Pnp found mismatched device identifier while scanning shuttle. Refer to IoPnp log for details.
+ALARM11015,Transfer Pnp exceeded maximum number of rescan adjust attempts for centering images.
+ALARM11016,Transfer Pnp scan detected potential device out of pocket condition for pocket(s) %s.
+ALARM11017,Transfer PnP scan did not receive the correct number of image acquisition triggers.
+ALARM11021,"The Manual 2DID results sent, were incomplete. Add more results or send the remaining unread devices to Reject Bin."
+ALARM11101,Left Input Shuttle unable to block Home sensor.
+ALARM11102,Left Input Shuttle unable to move off Home sensor.
+ALARM11103,Left Input Shuttle failed to home
+ALARM11104,Left Input shuttle unable to complete move. %s
+ALARM11106,Left Input Shuttle failed to do drift check and home
+ALARM11107,Left Input Shuttle unable to change torque.
+ALARM11108,Left Input Shuttle detected double device in Row %s.
+ALARM11301,Left Output Shuttle unable to block Home sensor.
+ALARM11302,Left Output Shuttle unable to move off Home sensor.
+ALARM11303,Left Output Shuttle failed to home
+ALARM11304,Left Output shuttle unable to complete move. %s
+ALARM11306,Left Output Shuttle failed to do drift check and home
+ALARM11307,Left Output Shuttle unable to change torque.
+ALARM11308,Left Output Shuttle detected double device in Row %s.
+ALARM11501,Right Input Shuttle unable to block Home sensor.
+ALARM11502,Right Input Shuttle unable to move off Home sensor.
+ALARM11503,Right Input Shuttle failed to home
+ALARM11504,Right Input shuttle unable to complete move. %s
+ALARM11506,Right Input Shuttle failed to do drift check and home
+ALARM11507,Right Input Shuttle unable to change torque.
+ALARM11508,Right Input Shuttle detected double device in Row %s.
+ALARM11701,Right Output Shuttle unable to block Home sensor.
+ALARM11702,Right Output Shuttle unable to move off Home sensor.
+ALARM11703,Right Output Shuttle failed to home
+ALARM11704,Right Output shuttle unable to complete move. %s
+ALARM11706,Right Output Shuttle failed to do drift check and home
+ALARM11707,Right Output Shuttle unable to change torque.
+ALARM11708,Right Output Shuttle detected double device in Row %s.
+ALARM11900,Left Test-Site PnP Undefined Alarm
+ALARM11901,Left Test-Site PnP X-Axis unable to block Home sensor.
+ALARM11902,Left Test-Site PnP X-Axis unable to move off Home sensor.
+ALARM11903,Left Test-Site PnP X-Axis unable to Home.
+ALARM11904,Left Test-Site PnP X-Axis unable to complete move. %s
+ALARM11905,Left Test-Site PnP X-Axis unable to unblock sensor
+ALARM11906,Left Test-Site PnP X-Axis failed to complete Drift Check.
+ALARM11907,Left Test-Site PnP X-Axis unable to change torque. %s
+ALARM11921,Left Test-Site PnP Z-Axis unable to block Home sensor.
+ALARM11922,Left Test-Site PnP Z-Axis unable to move off Home sensor.
+ALARM11923,Left Test-Site PnP Z-Axis unable to Home.
+ALARM11924,Left Test-Site PnP Z-Axis unable to complete move. %s
+ALARM11925,Left Test-Site PnP Z-Axis unable to unblock sensor
+ALARM11926,Left Test-Site PnP Z-Axis failed to complete Drift Check.
+ALARM11927,Left Test-Site PnP Z-Axis failed to change torque.
+ALARM11950,Left Test-Site PnP pick operation unable to pick up parts on nest(s) %s.
+ALARM11951,"Left Test-Site PnP Found unexpected part on nest(s) %s.  Open rear door, remove device to push Clear"
+ALARM11952,"Left Test-Site PnP parts not Found on nest(s) %s, after z nests raise on a pick operation."
+ALARM11953,Left Test-Site PnP place operation unable to place parts on nest(s) %s.
+ALARM11955,"Left Test-Site PnP lost part on nest(s) %s.  Open rear door, remove device to push Clear"
+ALARM11957,Left Test-Site PnP failed to enable vacumn for nest(s) %s
+ALARM11958,Left Test-Site PnP failed to disable vacumn for nest(s) %s
+ALARM11959,Left Test-Site PnP failed to enable blowoff for nest(s) %s
+ALARM11960,Left Test-Site PnP failed to disable blowoff for nest(s) %s
+ALARM11961,Left Test-Site PnP Chuck(s) %s failed to extend.
+ALARM11962,Left Test-Site PnP Chuck(s) %s failed to retract.
+ALARM11963,"Handler's Contactor %s stuck device. Open rear door, remove device to push Clear"
+ALARM11964,Left Test-Site PnP failed to disable unused vacuum channels.
+ALARM11965,Left Test-Site PnP nest(s) %s found unexpected device in shuttle.  Open door and remove parts to Clear
+ALARM11966,Left Test-Site PnP failed to toggle the Chuck Pressure
+ALARM11967,Left Test-Site PnP pick operation unable to pick up SCD parts on nest(s) %s.
+ALARM11968,"Left Test-Site PnP SCD parts not Found on nest(s) %s, after z nests raise on a pick operation."
+ALARM11969,"Left Test-Site PnP lost SCD part on nest(s) %s.  Open rear door, remove device to push Clear"
+ALARM11970,Sensor indicates that not all chucks are retracted on Left Test-Site PnP
+ALARM11971,Test site Vacuum Pump failed. Please fix and Retry
+ALARM11972,"Handler's Contactor %s stuck SCD device. Open rear door, remove SCD device to push Clear"
+ALARM11973,Left Test-Site PnP place operation unable to place SCD parts on nest(s) %s.
+ALARM11974,Left Test-Site PnP Z-Axis failed to extend.
+ALARM11975,Left Test-Site PnP Z-Axis failed to retract.
+ALARM11976,Left Test-Site PnP auto teach unable to find edge of fixture hole.
+ALARM11977,Left Test-Site PnP auto teach either tip(s) not positioned over fixture hole or full vacuum is too low.
+ALARM11978,"Left Test-Site PnP auto teach failed to find z reference position within 0.5"""
+ALARM11979,Left Test-Site PnP auto teach failed to find minimal vacuum when attempting to validate full vac
+ALARM11980,"Left Test-Site PnP auto teach failed, Planarity issue, not all nests found full vac within 0.030"" (0.762mm) of each other"
+ALARM11981,"Left Test-Site PnP: Please check for lost device(s) before continuing. Open rear door, to continue push Clear"
+ALARM12100,Right Test-Site PnP Undefined Alarm
+ALARM12101,Right Test-Site PnP X-Axis unable to block Home sensor.
+ALARM12102,Right Test-Site PnP X-Axis unable to move off Home sensor.
+ALARM12103,Right Test-Site PnP X-Axis unable to Home.
+ALARM12104,Right Test-Site PnP X-Axis unable to complete move. %s
+ALARM12105,Right Test-Site PnP X-Axis unable to unblock sensor
+ALARM12106,Right Test-Site PnP X-Axis failed to complete Drift Check.
+ALARM12107,Right Test-Site PnP X-Axis unable to change torque.
+ALARM12121,Right Test-Site PnP Z-Axis unable to block Home sensor.
+ALARM12122,Right Test-Site PnP Z-Axis unable to move off Home sensor.
+ALARM12123,Right Test-Site PnP Z-Axis unable to Home.
+ALARM12124,Right Test-Site PnP Z-Axis unable to complete move. %s
+ALARM12125,Right Test-Site PnP Z-Axis unable to unblock sensor
+ALARM12126,Right Test-Site PnP Z-Axis failed to complete Drift Check.
+ALARM12127,Right Test-Site PnP Z-Axis unable to change torque.
+ALARM12150,Right Test-Site PnP pick operation unable to pick up parts on nest(s) %s.
+ALARM12151,"Right Test-Site PnP found unexpected part on nest(s) %s. Open rear door, remove device to push Clear"
+ALARM12152,"Right Test-Site PnP parts not Found on nest(s) %s, after z nests raise on a pick operation. Open rear door, remove device to push Clear"
+ALARM12153,Right Test-Site PnP place operation unable to place parts on nest(s) %s.
+ALARM12155,"Right Test-Site PnP lost part on nest(s) %s.  Open rear door, remove device to push Clear"
+ALARM12157,Right Test-Site PnP failed to enable vacumn for nest(s) %s
+ALARM12158,Right Test-Site PnP failed to disable vacumn for nest(s) %s
+ALARM12159,Right Test-Site PnP failed to enable blowoff for nest(s) %s
+ALARM12160,Right Test-Site PnP failed to disable blowoff for nest(s) %s
+ALARM12161,Right Test-Site PnP Chuck(s) %s failed to extend.
+ALARM12162,Right Test-Site PnP Chuck(s) %s failed to retract.
+ALARM12163,"Handler's Contactor %s stuck device. Open rear door, remove device to push Clear"
+ALARM12164,Right Test-Site PnP failed to disable unused vacuum channels.
+ALARM12165,Right Test-Site PnP nest(s) %s found unexpected device in shuttle. Open door and remove parts to Clear
+ALARM12166,Right Test-Site PnP failed to toggle the Chuck Pressure
+ALARM12167,Right Test-Site PnP pick operation unable to pick up SCD parts on nest(s) %s.
+ALARM12168,"Right Test-Site PnP SCD parts not Found on nest(s) %s, after z nests raise on a pick operation."
+ALARM12169,"Right Test-Site PnP lost SCD part on nest(s) %s.  Open rear door, remove device to push Clear"
+ALARM12170,Sensor indicates that not all chucks are retracted on Right Test-Site PnP
+ALARM12171,Test site Vacuum Pump failed. Please fix and Retry
+ALARM12172,"Handler's Contactor %s stuck SCD device. Open rear door, remove SCD device to push Clear"
+ALARM12173,Right Test-Site PnP place operation unable to place SCD parts on nest(s) %s.
+ALARM12174,Right Test-Site PnP Z-Axis failed to extend.
+ALARM12175,Right Test-Site PnP Z-Axis failed to retract.
+ALARM12176,Right Test-Site PnP auto teach unable to find edge of fixture hole.
+ALARM12177,Right Test-Site PnP auto teach either tip(s) not positioned over fixture hole or full vacuum is too low.
+ALARM12178,"Right Test-Site PnP auto teach failed to find z reference position within 0.5"""
+ALARM12179,Right Test-Site PnP auto teach failed to find minimal vacuum when attempting to validate full vac
+ALARM12180,"Right Test-Site PnP auto teach failed, Planarity issue, not all nests found full vac within 0.030"" (0.762mm) of each other"
+ALARM12181,"Right Test-Site PnP: Please check for lost device(s) before continuing. Open rear door, to continue push Clear"
+ALARM12301,Image Acquisition board failure
+ALARM12302,Alignment camera failure
+ALARM12303,Test Site PnP camera failure
+ALARM12304,Contactor camera failure
+ALARM12305,Tester camera failure
+ALARM12306,Light controller board failure
+ALARM12307,Vision Recipe not found
+ALARM12308,Vision recipe failed validation
+ALARM12309,Vision security dongle is missing or is invalid.
+ALARM12310,Vision system configuration file is missing or is invalid.
+ALARM12311,Communication error between Vision and TLC board.
+ALARM12312,Device not found in camera image.
+ALARM12313,Camera light cannot be turned on.
+ALARM12314,Device not recognized.
+ALARM12316,An error occurred during image processing.
+ALARM12324,An error occurred during image capture.
+ALARM12337,Vision recipe file read error.
+ALARM12338,Camera Initialization error
+ALARM12339,USB Camera Error.
+ALARM12341,Vision recipe file save error.
+ALARM12342,Vision system recipe file not found.
+ALARM12347,Vision camera type configuration mismatch.
+ALARM12401,Imaging board error
+ALARM12406,TLC light controller error
+ALARM12407,In Socket Vision Recipe not found
+ALARM12410,Invalid or missing config file
+ALARM12411,TLC communication error
+ALARM12424,Image acquisition error
+ALARM12438,Camera initialization error ( fix hardware issue and restart handler)
+ALARM12439,USB Camera error(fix hardware issue and restart handler)
+ALARM12500,Output PnP Undefined Alarm
+ALARM12501,Output PnP X-Axis unable to block Home sensor.
+ALARM12502,Output PnP X-Axis unable to move off Home sensor.
+ALARM12503,Output PnP X-Axis unable to Home.
+ALARM12504,Output PnP X-Axis unable to complete move. %s
+ALARM12506,Output PnP X-Axis unable to complete drift check.
+ALARM12507,Output PnP X-Axis unable to change torque.
+ALARM12511,Output PnP Y-Axis unable to block Home sensor.
+ALARM12512,Output PnP Y-Axis unable to move off Home sensor.
+ALARM12513,Output PnP Y-Axis unable to Home.
+ALARM12514,Output PnP Y-Axis unable to complete move. %s
+ALARM12516,Output PnP Y-Axis unable to complete drift check.
+ALARM12517,Output PnP Y-Axis unable to change torque.
+ALARM12521,Output PnP Z-Axis unable to block Home sensor.
+ALARM12522,Output PnP Z-Axis unable to move off Home sensor.
+ALARM12523,Output PnP Z-Axis unable to Home.
+ALARM12524,Output PnP Z-Axis unable to complete move. %s
+ALARM12526,Output PnP Z-Axis unable to complete drift check.
+ALARM12527,Output PnP Z-Axis unable to change torque.
+ALARM12531,Output PnP X-PitchB Axis unable to block Home sensor.
+ALARM12532,Output PnP X-PitchB Axis unable to move off Home sensor.
+ALARM12533,Output PnP X-PitchB Axis unable to Home.
+ALARM12534,Output PnP X-PitchB Axis unable to complete move. %s %s
+ALARM12536,Output PnP X-PitchB Axis unable to complete drift check. %s %s
+ALARM12537,Output PnP X-PitchB Axis unable to change torque.
+ALARM12541,Output PnP X-Pitch Axis unable to block Home sensor.
+ALARM12542,Output PnP X-Pitch Axis unable to move off Home sensor.
+ALARM12543,Output PnP X-Pitch Axis unable to Home.
+ALARM12544,Output PnP X-Pitch Axis unable to complete move. %s
+ALARM12546,Output PnP X-Pitch Axis unable to complete drift check.
+ALARM12547,Output PnP X-Pitch Axis unable to change torque.
+ALARM12551,Output PnP Y-Pitch Axis unable to block Home sensor.
+ALARM12552,Output PnP Y-Pitch Axis unable to move off Home sensor.
+ALARM12553,Output PnP Y-Pitch Axis unable to Home.
+ALARM12554,Output PnP Y-Pitch Axis unable to complete move. %s
+ALARM12556,Output PnP Y-Pitch Axis unable to complete drift check.
+ALARM12557,Output PnP Y-Pitch Axis unable to change torque.
+ALARM12560,Output PnP pick operation unable to pick up parts on Z-Head(s) %s at %s.
+ALARM12561,"Output PnP unexpected part found on Z-Head(s) %s, before pick operation at %s."
+ALARM12562,"Output PnP parts not found on Z-Head(s) %s, after Z-Heads raise on a pick operation at %s."
+ALARM12563,Output PnP place operation unable to place parts on Z-Head(s) %s at %s.
+ALARM12564,"Output PnP unexpected parts found on Z-Head(s) %s, before the place operation at %s."
+ALARM12565,Output PnP parts not found on Z-Head(s) %s before Z-Axis goes down for place operation at %s.
+ALARM12566,Output PnP unable to enable clutch for Z-Head(s) %s.
+ALARM12567,Output PnP unable to disable clutch for Z-Head(s) %s.
+ALARM12568,Output PnP detected part present mismatch on Z-Head(s) %s during recovery.
+ALARM12569,Output PnP clutch in wrong state for Z-Head(s) %s.
+ALARM12570,Unexpected part found in %s pocket(s) %s.
+ALARM12571,Output PnP auto teach unable to find edge of fixture hole.
+ALARM12572,Output PnP auto teach either tip(s) not positioned over fixture hole or full vacuum is too low.
+ALARM12573,"Output PnP auto teach failed to find z reference position within 0.75"""
+ALARM12574,Output PnP auto teach failed to find at least 4inHg when attempting to validate full vac
+ALARM12575,"Output PnP auto teach failed, Planarity issue, not all nests found full vac within 0.060"" (1.524mm) of each other"
+ALARM12590,Left Output Shuttle Door unable to open.
+ALARM12591,Right Output Shuttle Door unable to open.
+ALARM12592,Left Output Shuttle Door unable to close.
+ALARM12593,Right Output Shuttle Door unable to close.
+ALARM12700,Contactor Undefined Alarm
+ALARM12701,Contactor Z-Axis unable to block Home sensor.
+ALARM12702,Contactor Z-Axis unable to move off Home sensor.
+ALARM12703,Contactor Z-Axis unable to Home.
+ALARM12704,Contactor Z-Axis unable to complete move. %s
+ALARM12706,Contactor Z-Axis unable to drift check. %s
+ALARM12707,Contactor Z-Axis unable to change torque.
+ALARM12721,Remove part(s) from contactor socket row(s) %s.
+ALARM12722,Part in contactor sensor for row(s) %s are not working when chucks are inserted into the contactor.
+ALARM12951,Continuity sensor failure for handler's sites (%s)
+ALARM12952,Vision Has not received all trigger(s) during on the fly capture motion
+ALARM12953,Camera found a device in the Contactor %s
+ALARM12954,Camera was unable to capture the contactor image for the %s side
+ALARM12955,Software Timeout waiting for %s Camera results
+ALARM13103,Vision Alignment Hardware Controller Site %s Motor_1 axis failed to home
+ALARM13104,Vision Alignment Site %s Motor_1 axis failed to complete move. %s
+ALARM13107,Vision Alignment Site %s Motor_1 vacuum lock failed to turn on. %s
+ALARM13108,Vision Alignment Site %s Motor_1 vacuum lock failed to turn off. %s
+ALARM13109,Vision Alignment Site %s continuity sensors monitor failed. %s
+ALARM13110,Vision Alignment Site %s continuity sensors read failed. %s
+ALARM13111,Vision Alignment Site %s vacuum lock failed to turn on. %s
+ALARM13112,Vision Alignment Site %s vacuum lock failed to turn off. %s
+ALARM13113,Vision Alignment Site %s air bearing failed to turn on. %s
+ALARM13114,Vision Alignment Site %s air bearing failed to turn off. %s
+ALARM13120,Vision Alignment Site %s cooling air failed to turn on. %s
+ALARM13121,Vision Alignment Site %s cooling air failed to turn off. %s
+ALARM13128,Vision Alignment Hardware Controller Site %s Motor_2 axis failed to home
+ALARM13129,Vision Alignment Site %s Motor_2 axis failed to complete move. %s
+ALARM13132,Vision Alignment Site %s Motor_2 vacuum lock failed to turn on. %s
+ALARM13133,Vision Alignment Site %s Motor_2 vacuum lock failed to turn off. %s
+ALARM13153,Vision Alignment Hardware Controller Site %s Motor_3 axis failed to home
+ALARM13154,Vision Alignment Site %s Motor_3 axis failed to complete move. %s
+ALARM13157,Vision Alignment Site %s Motor_3 vacuum lock failed to turn on. %s
+ALARM13158,Vision Alignment Site %s Motor_3 vacuum lock failed to turn off. %s
+ALARM13203,Vision Alignment Hardware Controller Site %s Motor_1 axis failed to home
+ALARM13204,Vision Alignment Site %s Motor_1 axis failed to complete move. %s
+ALARM13207,Vision Alignment Site %s Motor_1 vacuum lock failed to turn on. %s
+ALARM13208,Vision Alignment Site %s Motor_1 vacuum lock failed to turn off. %s
+ALARM13209,Vision Alignment Site %s continuity sensors monitor failed. %s
+ALARM13210,Vision Alignment Site %s continuity sensors read failed. %s
+ALARM13228,Vision Alignment Hardware Controller Site %s Motor_2 axis failed to home
+ALARM13229,Vision Alignment Site %s Motor_2 axis failed to complete move. %s
+ALARM13232,Vision Alignment Site %s Motor_2 vacuum lock failed to turn on. %s
+ALARM13233,Vision Alignment Site %s Motor_2 vacuum lock failed to turn off. %s
+ALARM13253,Vision Alignment Hardware Controller Site %s Motor_3 axis failed to home
+ALARM13254,Vision Alignment Site %s Motor_3 axis failed to complete move. %s
+ALARM13257,Vision Alignment Site %s Motor_3 vacuum lock failed to turn on. %s
+ALARM13258,Vision Alignment Site %s Motor_3 vacuum lock failed to turn off. %s
+ALARM13303,Vision Alignment Hardware Controller Site %s Motor_1 axis failed to home
+ALARM13304,Vision Alignment Site %s Motor_1 axis failed to complete move. %s
+ALARM13307,Vision Alignment Site %s Motor_1 vacuum lock failed to turn on. %s
+ALARM13308,Vision Alignment Site %s Motor_1 vacuum lock failed to turn off. %s
+ALARM13309,Vision Alignment Site %s continuity sensors monitor failed. %s
+ALARM13310,Vision Alignment Site %s continuity sensors read failed. %s
+ALARM13328,Vision Alignment Hardware Controller Site %s Motor_2 axis failed to home
+ALARM13329,Vision Alignment Site %s Motor_2 axis failed to complete move. %s
+ALARM13332,Vision Alignment Site %s Motor_2 vacuum lock failed to turn on. %s
+ALARM13333,Vision Alignment Site %s Motor_2 vacuum lock failed to turn off. %s
+ALARM13353,Vision Alignment Hardware Controller Site %s Motor_3 axis failed to home
+ALARM13354,Vision Alignment Site %s Motor_3 axis failed to complete move. %s
+ALARM13357,Vision Alignment Site %s Motor_3 vacuum lock failed to turn on. %s
+ALARM13358,Vision Alignment Site %s Motor_3 vacuum lock failed to turn off. %s
+ALARM13403,Vision Alignment Hardware Controller Site %s Motor_1 axis failed to home
+ALARM13404,Vision Alignment Site %s Motor_1 axis failed to complete move. %s
+ALARM13407,Vision Alignment Site %s Motor_1 vacuum lock failed to turn on. %s
+ALARM13408,Vision Alignment Site %s Motor_1 vacuum lock failed to turn off. %s
+ALARM13409,Vision Alignment Site %s continuity sensors monitor failed. %s
+ALARM13410,Vision Alignment Site %s continuity sensors read failed. %s
+ALARM13428,Vision Alignment Hardware Controller Site %s Motor_2 axis failed to home
+ALARM13429,Vision Alignment Site %s Motor_2 axis failed to complete move. %s
+ALARM13432,Vision Alignment Site %s Motor_2 vacuum lock failed to turn on. %s
+ALARM13433,Vision Alignment Site %s Motor_2 vacuum lock failed to turn off. %s
+ALARM13453,Vision Alignment Hardware Controller Site %s Motor_3 axis failed to home
+ALARM13454,Vision Alignment Site %s Motor_3 axis failed to complete move. %s
+ALARM13457,Vision Alignment Site %s Motor_3 vacuum lock failed to turn on. %s
+ALARM13458,Vision Alignment Site %s Motor_3 vacuum lock failed to turn off. %s
+ALARM13510,Testsite TIF Interface Read Docking sensor failure
+ALARM14100,Boat Xport Undefined Alarm
+ALARM14101,Boat Xport Conveyor unable to block Home sensor.
+ALARM14102,Boat Xport Conveyor unable to move off Home sensor.
+ALARM14103,Boat Xport Conveyor failed to home.
+ALARM14104,Boat Xport Conveyor failed to move.
+ALARM14105,Boat Xport Conveyor unable to move to sensor. %s
+ALARM14106,Boat Xport Conveyor unable to check reset home. %s
+ALARM14107,Boat Xport Conveyor unable to change torque.
+ALARM14300,Input-Output PnP Undefined Alarm
+ALARM14301,Input-Output PnP X-Axis unable to block Home sensor.
+ALARM14302,Input-Output PnP X-Axis unable to move off Home sensor.
+ALARM14303,Input-Output PnP X-Axis unable to Home.
+ALARM14304,Input-Output PnP X-Axis unable to complete move. %s %s
+ALARM14306,Input-Output PnP X-Axis unable to complete drift check. %s %s
+ALARM14307,Input-Output PnP X-Axis unable to change torque.
+ALARM14311,Input-Output PnP Y-Axis unable to block Home sensor.
+ALARM14312,Input-Output PnP Y-Axis unable to move off Home sensor.
+ALARM14313,Input-Output PnP Y-Axis unable to Home.
+ALARM14314,Input-Output PnP Y-Axis unable to complete move. %s %s
+ALARM14316,Input-Output PnP Y-Axis unable to complete drift check. %s %s
+ALARM14317,Input-Output PnP Y-Axis unable to change torque.
+ALARM14321,Input-Output PnP Z-Axis unable to block Home sensor.
+ALARM14322,Input-Output PnP Z-Axis unable to move off Home sensor.
+ALARM14323,Input-Output PnP Z-Axis unable to Home.
+ALARM14324,Input-Output PnP Z-Axis unable to complete move. %s %s
+ALARM14326,Input-Output PnP Z-Axis unable to complete drift check. %s %s
+ALARM14327,Input-Output PnP Z-Axis unable to change torque.
+ALARM14331,Input-Output PnP Z-Travel Axis unable to block Home sensor.
+ALARM14332,Input-Output PnP Z-Travel Axis unable to move off Home sensor.
+ALARM14333,Input-Output PnP Z-Travel Axis unable to Home.
+ALARM14334,Input-Output PnP Z-Travel Axis unable to complete move. %s %s
+ALARM14336,Input-Output PnP Z-Travel Axis unable to complete drift check. %s %s
+ALARM14337,Input-Output PnP Z-Travel Axis unable to change torque.
+ALARM14341,Input-Output PnP X-Pitch Axis unable to block Home sensor.
+ALARM14342,Input-Output PnP X-Pitch Axis unable to move off Home sensor.
+ALARM14343,Input-Output PnP X-Pitch Axis unable to Home.
+ALARM14344,Input-Output PnP X-Pitch Axis unable to complete move. %s %s
+ALARM14346,Input-Output PnP X-Pitch Axis unable to complete drift check. %s %s
+ALARM14347,Input-Output PnP X-Pitch Axis unable to change torque.
+ALARM14351,Input-Output PnP Y-Pitch Axis unable to block Home sensor.
+ALARM14352,Input-Output PnP Y-Pitch Axis unable to move off Home sensor.
+ALARM14353,Input-Output PnP Y-Pitch Axis unable to Home.
+ALARM14354,Input-Output PnP Y-Pitch Axis unable to complete move. %s %s
+ALARM14356,Input-Output PnP Y-Pitch Axis unable to complete drift check. %s %s
+ALARM14357,Input-Output PnP Y-Pitch Axis unable to change torque.
+ALARM14360,Input-Output PnP pick operation unable to pick up parts on Z-Head(s) %s at %s.
+ALARM14361,"Input-Output PnP unexpected part on Z-Head(s) %s, found before pick operation at %s."
+ALARM14362,"Input-Output PnP parts not found on Z-Head(s) %s, after Z-Heads raise on a pick operation at %s."
+ALARM14363,Input-Output PnP place operation unable to place parts on Z-Head(s) %s at %s.
+ALARM14364,"Input-Output PnP unexpected parts found on Z-Head(s) %s, before the place operation at %s."
+ALARM14365,Input-Output PnP parts not found on Z-Head(s) %s before Z-Axis goes down for place operation at %s.
+ALARM14366,Input-Output PnP unable to enable clutch for Z-Head(s) %s.
+ALARM14367,Input-Output PnP unable to disable clutch for Z-Head(s) %s.
+ALARM14368,Input-Output PnP detected part present mismatch on Z-Head(s) %s during recovery.
+ALARM14369,Input-Output PnP clutch in wrong state for Z-Head(s) %s.
+ALARM14370,Unexpected part found in %s pocket(s) %s.
+ALARM14380,Input-Output PnP pick operation unable to pick up SCDs on Z-Head(s) %s at %s.
+ALARM14382,"Input-Output PnP SCDs not found on Z-Head(s) %s, after Z-Heads raise on a pick operation at %s."
+ALARM14383,Input-Output PnP place operation unable to place SCDs on Z-Head(s) %s at %s.
+ALARM14385,Input-Output PnP SCDs not found on Z-Head(s) %s before Z-Axis goes down for place operation at %s.
+ALARM14390,Left Output Shuttle Door unable to open.
+ALARM14391,Right Output Shuttle Door unable to open.
+ALARM14392,Left Output Shuttle Door unable to close.
+ALARM14393,Right Output Shuttle Door unable to close.
