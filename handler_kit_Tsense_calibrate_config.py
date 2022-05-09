@@ -30,7 +30,6 @@ handler_list = [
     "MTXA11",
     "MTXA12",
     "MTXA13",
-
 ]
 custom_apps_list = ["kit_file_history_extractor.py", "matrix_kit_files_summary.py"]
 Drive_letter_read = "t:"
