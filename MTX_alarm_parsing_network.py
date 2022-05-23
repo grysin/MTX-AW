@@ -24,6 +24,8 @@ from shutil import copyfile
 from datetime import date
 from datetime import datetime
 from time import sleep
+import cx_Oracle
+cx_Oracle.init_oracle_client(lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3")
 
 program_name = "matrix_lot_log_alarm_extractor_shared_folder"
 program_version = "20220426"
@@ -35,7 +37,7 @@ defbg = root.cget('bg')
 try:
     handler_list = config.handler_list
 except AttributeError:
-    handler_list = ["MTX01","MTX02","MTX04","MTX05","MTX06","MTX07","MTX201","MTX202","MTX203","MTXA01","MTXA02","MTXA03","MTXA04"]
+    handler_list = ["MTX04","MTX06","MTX07","MTXA01","MTXA02","MTXA03","MTXA04","MTXA05", "MTXA06", "MTXA07", "MTXA08", "MTXA09", "MTXA10" ]
 handler_list.insert(0,"all")
 try:
     Drive_letter_read = config.Drive_letter_read
@@ -79,7 +81,7 @@ max_files = 0
 max_warnings = 10000
 Alarm_text = {}
 all_handlers_flag = 0
-outf = 0
+outf = 0 # should this be a zero? 
 Drive_letter_read = "t:"
 wu = "fsl\\ultraflexdev"
 wup = "Development1"
@@ -625,7 +627,7 @@ def copy_files():
     global defoutfilename
     global all_handlers_flag
     global outf
-
+    # creates a dictionary called alarm_text that links alarm codes to their description
     Read_matrix_alarm_text_lookup()
     history_weeks = e2.get()
     print("history_weeks=",history_weeks)

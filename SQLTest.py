@@ -3,6 +3,8 @@
 import cx_Oracle
 import os
 
+cx_Oracle.init_oracle_client(lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3")
+
 #SQL="SELECT * FROM TSENSE_CALIBRATION_INDEX"
 SQL="SELECT SYSDATE FROM DUAL"
 SQL="SELECT 2+4, 3+7 FROM DUAL"
