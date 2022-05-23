@@ -175,7 +175,7 @@ with open(file) as csv_file:
             + clearcount
             + ","
             + settime
-            + ");"
+            + ")"
         )
         # + ","
         # + clearedtime
