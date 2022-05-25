@@ -153,11 +153,11 @@ def update_revision():
         delimiters = " -- ", "."
         regexpPattern = "|".join(map(re.escape, delimiters))
         [temp_prog_name, temp_prog_ver, py] = re.split(regexpPattern, f)
-        print(("temp_prog_name=", temp_prog_name, ",temp_prog_rev=", temp_prog_ver))
+        # print(("temp_prog_name=", temp_prog_name, ",temp_prog_rev=", temp_prog_ver))
         if temp_prog_name == program_name:
             latest_prog_ver = temp_prog_ver
             latest_program = f
-    print(("lastest_prog_ver=", latest_prog_ver, ",program_version=", program_version))
+    # print(("lastest_prog_ver=", latest_prog_ver, ",program_version=", program_version))
     if latest_prog_ver > program_version:
         shutil.copy(program_name + ".py", "Archives/" + program_name + ".bak.py")
         print((program_name + ".py" + "," + "Archives/" + program_name + ".bak.py"))

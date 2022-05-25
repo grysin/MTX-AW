@@ -19,7 +19,7 @@ conn = cx_Oracle.connect(connect_string)
 cursor = conn.cursor()
 
 # choose csv file to add to database
-file = "MTX07_lot_log_error_results.csv"
+file = "all_results.csv"
 # open the file
 with open(file) as csv_file:
     # read the file
@@ -87,6 +87,18 @@ with open(file) as csv_file:
         handlerid = row[49]
         siteid = row[50]
 
+        try:
+            int(clearedtime)
+            str(clearedtime)
+        except ValueError:
+            clearedtime = str(len(""))
+
+        try:
+            int(settime)
+            str(settime)
+        except ValueError:
+            settime = str(len(""))
+
         sql_insert = "INSERT INTO MTX_ALARM_LOG(FNAME, KIT, TEST, SYSTEM, SETPOINT, JOB_TIME, JOB_TIME_READABLE,"
         sql_insert = (
             sql_insert
@@ -98,18 +110,19 @@ with open(file) as csv_file:
         )
         sql_insert = (
             sql_insert
-            + " ARG1, ARG2, REBOOTCOUNT, REINITCOUNT, RETRYCOUNT, CLEARCOUNT, SET_TIME)"
-        )  # CLEARED_TIME,"
+            + " ARG1, ARG2, REBOOTCOUNT, REINITCOUNT, RETRYCOUNT, CLEARCOUNT, SET_TIME, CLEARED_TIME,"
+        )
+        sql_insert = (
+            sql_insert
+            + " SET_READABLE, CLEARED_READABLE, ELAPSEDTIME, UNKNOWN2, UNKNOWN3, UNKNOWN4, TEMPERATURE, E10MODE, OPMODE,"
+        )
+        sql_insert = (
+            sql_insert
+            + " STATIONMODE, TESTERMODE, AIRPLOW, PARTCOUNT, CYCLECOUNT, UNKNOWN5, USERID, HANDLERID, SITEID)"
+        )
+        print("\n")
+        print(sql_insert)
 
-        # sql_insert = (
-        #     sql_insert
-        #     + " SET_READABLE, CLEARED_READABLE, ELAPSEDTIME, UNKNOWN2, UNKNOWN3, UNKNOWN4, TEMPERATURE, E10MODE, OPMODE,"
-        # )
-        # sql_insert = (
-        #     sql_insert
-        #     + " STATIONMODE, TESTERMODE, AIRPLOW, PARTCOUNT, CYCYLECOUNT, UNKNOWN5, USERID, HANDLERID, SITEID) "
-        # )
-        # print(sql_insert)
         sql_insert = (
             sql_insert
             + " VALUES(q'["
@@ -176,46 +189,47 @@ with open(file) as csv_file:
             + clearcount
             + ","
             + settime
-            + ")"
+            + ","
+            + clearedtime
+            + ", q'["
+            + settime_readable
+            + "]', q'["
+            + clearedtime_readable
+            + "]',"
+            + elapsedtime
+            + ","
+            + unknown2
+            + ","
+            + unknown3
+            + ","
+            + unknown4
+            + ","
+            + temperature
+            + ",'"
+            + e10mode
+            + "','"
+            + opmode
+            + "',"
+            + stationmode
+            + ","
+            + testermode
+            + ","
+            + airplow
+            + ","
+            + partcount
+            + ","
+            + cyclecount
+            + ",'"
+            + unknown5
+            + "','"
+            + userid
+            + "','"
+            + handlerid
+            + "','"
+            + siteid
+            + "')"
         )
-        # + ","
-        # + clearedtime
-        # + ","
-        # + settime_readable
-        # + ","
-        # + clearedtime_readable
-        # + ","
-        # + elapsedtime
-        # + ","
-        # + unknown2
-        # + ","
-        # + unknown3
-        # + ","
-        # + unknown4
-        # + ","
-        # + temperature
-        # + ","
-        # + e10mode
-        # + ","
-        # + opmode
-        # + ","
-        # + stationmode
-        # + ","
-        # + testermode
-        # + ","
-        # + airplow
-        # + ","
-        # + partcount
-        # + ","
-        # + cyclecount
-        # + ","
-        # + unknown5
-        # + ","
-        # + userid
-        # + ","
-        # + handlerid
-        # + ","
-        # + siteid
+
         print("\n")
         print(sql_insert)
         print("\n")
