@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from sqlite3 import IntegrityError
 import cx_Oracle
 import os
 import csv
@@ -145,9 +146,9 @@ with open(file) as csv_file:
             + intid
             + ","
             + alid
-            + ",'"
+            + ", q'["
             + alarm_text
-            + "',"
+            + "]',"
             + lotparts
             + ", q'["
             + subid
@@ -218,8 +219,13 @@ with open(file) as csv_file:
         print("\n")
         print(sql_insert)
         print("\n")
-        cursor.execute(sql_insert)
+        try:
+            cursor.execute(sql_insert)
+        except cx_Oracle.IntegrityError:
+            print("Duplicate")
+            pass
     conn.commit()
+    print("completed")
 
 # print("Header: \n", header) #test
 # print("Contents of CSV file: \n", alarms) #test

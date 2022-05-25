@@ -5,6 +5,7 @@ Python language test program
 """
 import sys
 from sys import version_info
+
 py3 = version_info[0] > 2
 
 import re
@@ -14,6 +15,7 @@ import handler_kit_Tsense_calibrate_config as config
 import shutil
 
 from pprint import pprint
+
 if py3:
     from tkinter import *
     from tkinter.filedialog import *
@@ -25,20 +27,37 @@ from datetime import date
 from datetime import datetime
 from time import sleep
 import cx_Oracle
-cx_Oracle.init_oracle_client(lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3")
+
+cx_Oracle.init_oracle_client(
+    lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3"
+)
 
 program_name = "matrix_lot_log_alarm_extractor_shared_folder"
 program_version = "20220426"
 program_title = "matrix alarm extractor"
 root = Tk()
 root.title(program_title + " - " + program_version)
-defbg = root.cget('bg')
+defbg = root.cget("bg")
 
 try:
     handler_list = config.handler_list
 except AttributeError:
-    handler_list = ["MTX04","MTX06","MTX07","MTXA01","MTXA02","MTXA03","MTXA04","MTXA05", "MTXA06", "MTXA07", "MTXA08", "MTXA09", "MTXA10" ]
-handler_list.insert(0,"all")
+    handler_list = [
+        "MTX04",
+        "MTX06",
+        "MTX07",
+        "MTXA01",
+        "MTXA02",
+        "MTXA03",
+        "MTXA04",
+        "MTXA05",
+        "MTXA06",
+        "MTXA07",
+        "MTXA08",
+        "MTXA09",
+        "MTXA10",
+    ]
+handler_list.insert(0, "all")
 try:
     Drive_letter_read = config.Drive_letter_read
 except AttributeError:
@@ -51,18 +70,18 @@ try:
     check_revision_on_startup = config.check_revision_on_startup
 except AttributeError:
     check_revision_on_startup = 1
-#check_revision_on_startup = 0
+# check_revision_on_startup = 0
 
 try:
     release_archives = config.release_archives
 except AttributeError:
-    #release_archives = r'"\\npi1412-09\C$\Program Files (x86)\Anaconda2\matt\kit_file_editing\Release_Archives"'
+    # release_archives = r'"\\npi1412-09\C$\Program Files (x86)\Anaconda2\matt\kit_file_editing\Release_Archives"'
     release_archives = r'"\\npi1412-09\kit_file_editing\Release_Archives"'
 
 ## the method Rob Webb was using as of 20200511 was "Warns_Report"; but, it doesn't seem to work anymore
 ## the proper method still needs to be resolved before this software version can be rolled out.
 method = "Lot_History"
-#method = "Warns_Report"
+# method = "Warns_Report"
 
 reftime = time.time()
 year_secs = 31536000
@@ -75,13 +94,13 @@ updatekitfilename = "base_8offset_exp_ml.xml"
 defoutfilename = "results.csv"
 defoutputdir = "temp"
 outputdir = "temp"
-#history_weeks = 12
+# history_weeks = 12
 history_weeks = 4
 max_files = 0
 max_warnings = 10000
 Alarm_text = {}
 all_handlers_flag = 0
-outf = 0 # should this be a zero? 
+outf = 0  # should this be a zero?
 Drive_letter_read = "t:"
 wu = "fsl\\ultraflexdev"
 wup = "Development1"
@@ -103,6 +122,7 @@ dev_setting = {}
 #
 #
 
+
 def update_revision():
     global update_win
 
@@ -110,14 +130,16 @@ def update_revision():
         update_win.destroy()
     except NameError:
         print("update_window not open")
-    disconnect_string = r'net use ' + Drive_letter_read + r' /del /y'
+    disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(str(disconnect_string))
     cn_status.config(text="not connected", bg=defbg)
 
-    if os.system("ping -n 1 " + 'Npi1412-09') == 0:
-        rev_hist_connect_string = r'net use ' + Drive_letter_read + r' ' + release_archives
+    if os.system("ping -n 1 " + "Npi1412-09") == 0:
+        rev_hist_connect_string = (
+            r"net use " + Drive_letter_read + r" " + release_archives
+        )
         os.system(str(rev_hist_connect_string))
-        print(("rev_hist_connect_string=",rev_hist_connect_string))
+        print(("rev_hist_connect_string=", rev_hist_connect_string))
         rev_hist_dir = Drive_letter_read + "/."
     else:
         rev_hist_dir = "Release_Archives"
@@ -129,22 +151,24 @@ def update_revision():
         return
     for f in rev_hist_files:
         delimiters = " -- ", "."
-        regexpPattern = '|'.join(map(re.escape, delimiters))
-        [temp_prog_name,temp_prog_ver,py] = re.split(regexpPattern, f)
-        print(("temp_prog_name=",temp_prog_name,",temp_prog_rev=",temp_prog_ver))
+        regexpPattern = "|".join(map(re.escape, delimiters))
+        [temp_prog_name, temp_prog_ver, py] = re.split(regexpPattern, f)
+        print(("temp_prog_name=", temp_prog_name, ",temp_prog_rev=", temp_prog_ver))
         if temp_prog_name == program_name:
             latest_prog_ver = temp_prog_ver
             latest_program = f
-    print(("lastest_prog_ver=",latest_prog_ver,",program_version=",program_version))
+    print(("lastest_prog_ver=", latest_prog_ver, ",program_version=", program_version))
     if latest_prog_ver > program_version:
-        shutil.copy(program_name + ".py","Archives/" + program_name + ".bak.py")
-        print((program_name + ".py"+ "," + "Archives/" + program_name + ".bak.py"))
-        shutil.copy(Drive_letter_read + latest_program,"Archives")
+        shutil.copy(program_name + ".py", "Archives/" + program_name + ".bak.py")
+        print((program_name + ".py" + "," + "Archives/" + program_name + ".bak.py"))
+        shutil.copy(Drive_letter_read + latest_program, "Archives")
         print((Drive_letter_read + latest_program + "," + "Archives"))
-        shutil.copy(Drive_letter_read + latest_program,program_name + ".py")
+        shutil.copy(Drive_letter_read + latest_program, program_name + ".py")
         print((Drive_letter_read + latest_program + "," + program_name + ".py"))
-        #check_revision_update()
-        subprocess.Popen('..\..\python matrix_kit_files_summary.py', shell=True)  # ignoring shell=True
+        # check_revision_update()
+        subprocess.Popen(
+            "..\..\python matrix_kit_files_summary.py", shell=True
+        )  # ignoring shell=True
         exit_program()
     else:
         notice_text = "program version is up to date"
@@ -152,14 +176,17 @@ def update_revision():
     os.system(disconnect_string)
     return
 
+
 def check_revision_update(notify_if_uptodate=1):
-    disconnect_string = r'net use ' + Drive_letter_read + r' /del /y'
+    disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(str(disconnect_string))
     cn_status.config(text="not connected", bg=defbg)
-    if os.system("ping -n 1 " + 'Npi1412-09') == 0:
-        rev_hist_connect_string = r'net use ' + Drive_letter_read + r' ' + release_archives
+    if os.system("ping -n 1 " + "Npi1412-09") == 0:
+        rev_hist_connect_string = (
+            r"net use " + Drive_letter_read + r" " + release_archives
+        )
         os.system(str(rev_hist_connect_string))
-        print(("rev_hist_connect_string=",rev_hist_connect_string))
+        print(("rev_hist_connect_string=", rev_hist_connect_string))
         rev_hist_dir = Drive_letter_read + "/."
     else:
         rev_hist_dir = "Release_Archives"
@@ -171,93 +198,106 @@ def check_revision_update(notify_if_uptodate=1):
         return
     for f in rev_hist_files:
         delimiters = " -- ", "."
-        regexpPattern = '|'.join(map(re.escape, delimiters))
-        [temp_prog_name,temp_prog_ver,py] = re.split(regexpPattern, f)
-        print(("temp_prog_name=",temp_prog_name,",temp_prog_rev=",temp_prog_ver))
+        regexpPattern = "|".join(map(re.escape, delimiters))
+        [temp_prog_name, temp_prog_ver, py] = re.split(regexpPattern, f)
+        print(("temp_prog_name=", temp_prog_name, ",temp_prog_rev=", temp_prog_ver))
         if temp_prog_name == program_name:
             latest_prog_ver = temp_prog_ver
-    print(("lastest_prog_ver=",latest_prog_ver,",program_version=",program_version))
+    print(("lastest_prog_ver=", latest_prog_ver, ",program_version=", program_version))
     if latest_prog_ver > program_version:
         notice_text = "new program version (" + latest_prog_ver + ") is available"
-        Update_window(notice_text,"red")
+        Update_window(notice_text, "red")
     else:
         notice_text = "program version is up to date"
         if notify_if_uptodate == 1:
-            Update_window(notice_text,"green")
+            Update_window(notice_text, "green")
     print(notice_text)
     os.system(disconnect_string)
-    #check_config_revision_update(notify_if_uptodate)
+    # check_config_revision_update(notify_if_uptodate)
     return
 
-def Update_window(message,color="red"):
+
+def Update_window(message, color="red"):
     global update_win
 
     update_win = Toplevel()
     update_win.focus_force()
-    #update_win.grab_set()
+    # update_win.grab_set()
 
     update_win.l1 = Label(update_win, text=message, bg=color)
     update_win.selections = Frame(update_win)
-    update_win.b1 = Button(update_win.selections, text="Cancel", fg="red", command=update_win.destroy)
+    update_win.b1 = Button(
+        update_win.selections, text="Cancel", fg="red", command=update_win.destroy
+    )
     if "config" in message:
-        update_win.b2 = Button(update_win.selections, text="Update", fg="red", command=update_config_revision)
+        update_win.b2 = Button(
+            update_win.selections,
+            text="Update",
+            fg="red",
+            command=update_config_revision,
+        )
     else:
-        update_win.b2 = Button(update_win.selections, text="Update", fg="red", command=update_revision)
-    update_win.l1.pack(side=TOP,fill=X,expand=1)
-    update_win.selections.pack(side=BOTTOM,fill=X,expand=1)
+        update_win.b2 = Button(
+            update_win.selections, text="Update", fg="red", command=update_revision
+        )
+    update_win.l1.pack(side=TOP, fill=X, expand=1)
+    update_win.selections.pack(side=BOTTOM, fill=X, expand=1)
     update_win.b1.pack(side=LEFT)
     update_win.b2.pack(side=RIGHT)
     return
+
+
 #
 #
 ## end automatic revision update
 
 
-def parse_file_Warns_Report(fname,outf):
-    print("parse_file_Warns_Report(",fname,",",outf,"):")
-    f = open(fname, 'r')
+def parse_file_Warns_Report(fname, outf):
+    print("parse_file_Warns_Report(", fname, ",", outf, "):")
+    f = open(fname, "r")
     handlername = handler.get()
     header = 0
     IntID_list = []
     n = 0
     num_warnings = 0
     for line in f:
-        print("line=",line)
+        print("line=", line)
         n = n + 1
-        #max_warnings = 10
+        # max_warnings = 10
         if num_warnings > max_warnings:
             break
         if "IntID" in line:
             header = 1
-            #outf.write(line)
-            #print("*** ",line)
+            # outf.write(line)
+            # print("*** ",line)
             continue
         if header == 1:
             IntID = line.split(",")[1]
             set_time = line.split(",")[13]
-            warningtime = datetime.strptime(set_time, '%H:%M:%S %d-%b-%Y')
-            #print("IntID=",IntID)
-            #print("IntID_list=",IntID_list)
+            warningtime = datetime.strptime(set_time, "%H:%M:%S %d-%b-%Y")
+            # print("IntID=",IntID)
+            # print("IntID_list=",IntID_list)
             epoch = datetime.utcfromtimestamp(0)
             warningtime = (warningtime - epoch).total_seconds()
             if reftime - warningtime > int(history_weeks) * week_secs:
-                #print ("reftime=",reftime," warningtime=",warningtime,"delta=",reftime - warningtime,"\n")
-                #print ("history_weeks=",history_weeks," week_secs=",week_secs,"product=",int(history_weeks)*week_secs,"\n")
-                #print("exceeds file age\n")
+                # print ("reftime=",reftime," warningtime=",warningtime,"delta=",reftime - warningtime,"\n")
+                # print ("history_weeks=",history_weeks," week_secs=",week_secs,"product=",int(history_weeks)*week_secs,"\n")
+                # print("exceeds file age\n")
                 continue
             if IntID not in IntID_list:
-                #print(".... included \n")
-                #outf.write(str(reftime) + "," + str(warningtime) + "," + line)
+                # print(".... included \n")
+                # outf.write(str(reftime) + "," + str(warningtime) + "," + line)
                 outf.write(line)
-                #print("*** ",line)
+                # print("*** ",line)
                 IntID_list.append(IntID)
                 num_warnings = num_warnings + 1
     f.close()
     return
 
-def parse_file_Lot_History(fname,outf):
-    print("parse_file_Lot_History(",fname,",",outf,"):")
-    f = open(fname, 'r')
+
+def parse_file_Lot_History(fname, outf):
+    print("parse_file_Lot_History(", fname, ",", outf, "):")
+    f = open(fname, "r")
     handlername = handler.get()
 
     for line in f:
@@ -273,22 +313,22 @@ def parse_file_Lot_History(fname,outf):
             job_time = line.split()[1]
         if "Global:Job_Time_Readable " in line:
             job_time_readable = line.split()[1] + " " + line.split()[2]
-            job_time_readable = job_time_readable.replace("{","\"")
-            job_time_readable = job_time_readable.replace("}","\"")
+            job_time_readable = job_time_readable.replace("{", '"')
+            job_time_readable = job_time_readable.replace("}", '"')
         if "Global:End_Time " in line:
             end_time = line.split()[1]
         if "Global:End_Time_Readable " in line:
             end_time_readable = line.split()[1] + " " + line.split()[2]
-            end_time_readable = end_time_readable.replace("{","\"")
-            end_time_readable = end_time_readable.replace("}","\"")
-        #if "Warn:" in line:
+            end_time_readable = end_time_readable.replace("{", '"')
+            end_time_readable = end_time_readable.replace("}", '"')
+        # if "Warn:" in line:
         if "AlarmData:" in line:
             alarmstring = line.strip()
             outstring = fname + "," + kit + "," + test + "," + system + "," + setpoint
             outstring = outstring + "," + job_time + "," + job_time_readable
             outstring = outstring + "," + end_time + "," + end_time_readable
             outstring = outstring + "," + alarmstring
-            #outf.write(outstring + "\n")
+            # outf.write(outstring + "\n")
 
             fields = parse_alarm(line)
             IntID = fields[0]
@@ -299,9 +339,9 @@ def parse_file_Lot_History(fname,outf):
             else:
                 Alarm_text[AlarmText] = "Text not found"
                 AlarmText = AlarmText + "-" + Alarm_text[AlarmText]
-                print((AlarmText," -- text not found"))
+                print((AlarmText, " -- text not found"))
             if "," in AlarmText:
-                AlarmText = "\"" + AlarmText + "\""
+                AlarmText = '"' + AlarmText + '"'
             LotParts = fields[2]
             SubID = fields[3]
             Source = fields[4]
@@ -351,7 +391,9 @@ def parse_file_Lot_History(fname,outf):
             SiteID = fields[34]
 
             if 1 == 1:
-                outstring_b = fname + "," + kit + "," + test + "," + system + "," + setpoint
+                outstring_b = (
+                    fname + "," + kit + "," + test + "," + system + "," + setpoint
+                )
                 outstring_b = outstring_b + "," + job_time + "," + job_time_readable
                 outstring_b = outstring_b + "," + end_time + "," + end_time_readable
                 outstring_b = outstring_b + "," + handlername
@@ -397,18 +439,29 @@ def parse_file_Lot_History(fname,outf):
                 outstring_b = outstring_b + "," + HandlerID
                 outstring_b = outstring_b + "," + SiteID
 
-        #       for fld in fields:
-        #               outstring_b = outstring_b + "," + fld
-#
-#                       outstring_b = outstring_b + "," + AlarmText
+            #       for fld in fields:
+            #               outstring_b = outstring_b + "," + fld
+            #
+            #                       outstring_b = outstring_b + "," + AlarmText
             outf.write(outstring_b + "\n")
 
-            #print(fname,",",kit,",",test,",",system,",",setpoint,"\n")
+            # print(fname,",",kit,",",test,",",system,",",setpoint,"\n")
     f.close()
     return
 
+
 def outfile_header_row_Warns_Report(outf):
-    header = "Handler Name" + "," + "IntID" + "," + "WARNID" + "," + "Warn Text" + "," + "Source"
+    header = (
+        "Handler Name"
+        + ","
+        + "IntID"
+        + ","
+        + "WARNID"
+        + ","
+        + "Warn Text"
+        + ","
+        + "Source"
+    )
     header = header + ",Type"
     header = header + ",Class"
     header = header + ",Subclass"
@@ -435,11 +488,26 @@ def outfile_header_row_Warns_Report(outf):
     outf.write(header + "\n")
     return
 
+
 def outfile_header_row_Lot_History(outf):
     header = "fname" + "," + "kit" + "," + "test" + "," + "system" + "," + "setpoint"
     header = header + "," + "job_time" + "," + "job_time_readable"
     header = header + "," + "end_time" + "," + "end_time_readable"
-    header = header + "," + "handlername" + "," + "DayOfWeek" + "," + "month" + "," + "week" + ","+"quarter"+","+"year"
+    header = (
+        header
+        + ","
+        + "handlername"
+        + ","
+        + "DayOfWeek"
+        + ","
+        + "month"
+        + ","
+        + "week"
+        + ","
+        + "quarter"
+        + ","
+        + "year"
+    )
     header = header + ",IntID"
     header = header + ",ALID"
     header = header + ",AlarmText"
@@ -479,19 +547,21 @@ def outfile_header_row_Lot_History(outf):
     outf.write(header + "\n")
     return
 
+
 def Read_matrix_alarm_text_lookup():
     global Alarm_text
 
     Alarm_text = {}
-    lookup = open("Matrix_alarm_text_lookup.csv", 'r')
+    lookup = open("Matrix_alarm_text_lookup.csv", "r")
     for line in lookup:
-        #(Alarm,text) = line.strip().split(",")
-        (Alarm,text) = parse_line_csv(line.strip())
+        # (Alarm,text) = line.strip().split(",")
+        (Alarm, text) = parse_line_csv(line.strip())
         Alarm_text[Alarm] = text
     lookup.close()
     return
 
-def connect_handlers(hostname="checklist",lwu='',lwup=''):
+
+def connect_handlers(hostname="checklist", lwu="", lwup=""):
     global inputInitialDir
     global ndn
     global cn_status
@@ -501,17 +571,18 @@ def connect_handlers(hostname="checklist",lwu='',lwup=''):
 
     if hostname == "all":
         e4.delete(0, END)
-        for hostname in (handler_list):
+        for hostname in handler_list:
             ndn = hostname
-            con_stat = connect_handler(hostname,lwu,lwup)
+            con_stat = connect_handler(hostname, lwu, lwup)
     else:
         ndn = hostname
-        con_stat = connect_handler(hostname,lwu,lwup)
-    #print "read check complete"
-    #e4.insert(0, "read check complete")
+        con_stat = connect_handler(hostname, lwu, lwup)
+    # print "read check complete"
+    # e4.insert(0, "read check complete")
     return 0
 
-def connect_handler(hostname="checklist",lwu='',lwup=''):
+
+def connect_handler(hostname="checklist", lwu="", lwup=""):
     global inputInitialDir
     global ndn
     global cn_status
@@ -530,9 +601,9 @@ def connect_handler(hostname="checklist",lwu='',lwup=''):
             return
     if "MTX" in hostname:
         hostname = hostname + "-01"
-    print(("host name= ",hostname))
+    print(("host name= ", hostname))
 
-    disconnect_string = r'net use ' + Drive_letter_read + r' /del /y'
+    disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(disconnect_string)
     cn_status.config(text="not connected", bg=defbg)
     sleep(8)
@@ -540,30 +611,43 @@ def connect_handler(hostname="checklist",lwu='',lwup=''):
     ndn = "ERROR"
     if os.system("ping -n 1 " + hostname) == 0:
         print((hostname, "IS reached"))
-        if lwu == '':
-            handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + connect_path
+        if lwu == "":
+            handler_connect_string = (
+                r"net use " + Drive_letter_read + r" \\" + hostname + connect_path
+            )
         else:
-            handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + connect_path + r' /user:' + lwu + r' ' + lwup + r' /persistent:no'
+            handler_connect_string = (
+                r"net use "
+                + Drive_letter_read
+                + r" \\"
+                + hostname
+                + connect_path
+                + r" /user:"
+                + lwu
+                + r" "
+                + lwup
+                + r" /persistent:no"
+            )
         print(handler_connect_string)
         os.system(handler_connect_string)
         ndn = hostname.split("-")[0]
-        #if hostname == "MTX01-01":
-            #os.system(r'net use t: \\mtx01-01\Recipes')
-            #ndn = "MTX01"
-        #elif hostname == "MTX02-01":
-            #os.system(r'net use t: \\mtx02-01\Recipes')
-            #ndn = "MTX02"
-        #else:
-            #print('MATRIX NAME ERROR')
-            #cn_status.config(text="not connected", bg=defbg)
-            #return
+        # if hostname == "MTX01-01":
+        # os.system(r'net use t: \\mtx01-01\Recipes')
+        # ndn = "MTX01"
+        # elif hostname == "MTX02-01":
+        # os.system(r'net use t: \\mtx02-01\Recipes')
+        # ndn = "MTX02"
+        # else:
+        # print('MATRIX NAME ERROR')
+        # cn_status.config(text="not connected", bg=defbg)
+        # return
 
-        #inputInitialDir = Drive_letter_read + "/MatrixHandler/Kit"
+        # inputInitialDir = Drive_letter_read + "/MatrixHandler/Kit"
         inputInitialDir = Drive_letter_read + "/."
 
         if os.path.exists(inputInitialDir):
             # update HERE
-            cn_status.config(text="connected to %s" % ndn, bg='blue')
+            cn_status.config(text="connected to %s" % ndn, bg="blue")
             print(("connected to " + ndn))
             e4.insert(0, lwu + " connected to " + hostname + connect_path)
             e4.update()
@@ -571,7 +655,7 @@ def connect_handler(hostname="checklist",lwu='',lwup=''):
             print((hostname, "is NOT connected"))
             cn_status.config(text="not connected", bg=defbg)
             e4.insert(0, lwu + " is NOT connected to " + hostname + connect_path)
-            #Error_window("Error: handler is not connected")
+            # Error_window("Error: handler is not connected")
             return 1
 
     else:
@@ -588,11 +672,12 @@ def check_connections():
     global con_dir
 
     for con_dir in ["Lot_History", "log", "Recipes", "C$", "D$"]:
-        #connect_handlers()
-        connect_handlers('checklist',wu,wup)
+        # connect_handlers()
+        connect_handlers("checklist", wu, wup)
     print("check connections complete")
     e4.insert(0, "check connections complete")
     return
+
 
 def ping_connections():
     global uf
@@ -604,15 +689,15 @@ def ping_connections():
     e4.delete(0, END)
     for handler in handler_list:
         hostname = handler + "-01"
-        print(("host name= ",hostname))
+        print(("host name= ", hostname))
 
         response = os.system("ping -n 1 " + hostname)
         if response == 0:
-            print((hostname, 'is up'))
+            print((hostname, "is up"))
             e4.insert(0, hostname + " is reached")
             e4.update()
         else:
-            print((hostname, 'is down'))
+            print((hostname, "is down"))
             e4.insert(0, hostname + " is NOT reached")
             e4.update()
 
@@ -630,32 +715,52 @@ def copy_files():
     # creates a dictionary called alarm_text that links alarm codes to their description
     Read_matrix_alarm_text_lookup()
     history_weeks = e2.get()
-    print("history_weeks=",history_weeks)
-    #max_files = e4.get()
+    print("history_weeks=", history_weeks)
+    # max_files = e4.get()
     max_files = "0"
     hostname = handler.get() + "-01"
     filetype = getfiletype.get()
-    print(("host name= ",hostname))
-    print(("get file type= ",filetype))
+    print(("host name= ", hostname))
+    print(("get file type= ", filetype))
 
-    disconnect_string = r'net use ' + Drive_letter_read + r' /del /y'
+    disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
 
     os.system(disconnect_string)
-    #sleep(10)
+    # sleep(10)
 
     ndn = "ERROR"
     if os.system("ping -n 1 " + hostname) == 0:
         e4.insert(0, hostname + " is connected")
         e4.update()
         if method == "Lot_History":
-            handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + r'\D$ /user:' + wu + r' ' + wup + r' /persistent:no'
-            #handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + r'\Lot_history\ /user:' + wu + r' ' + wup + r' /persistent:no'
+            handler_connect_string = (
+                r"net use "
+                + Drive_letter_read
+                + r" \\"
+                + hostname
+                + r"\D$ /user:"
+                + wu
+                + r" "
+                + wup
+                + r" /persistent:no"
+            )
+            # handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + r'\Lot_history\ /user:' + wu + r' ' + wup + r' /persistent:no'
             os.system(handler_connect_string)
         elif method == "Warns_Report":
-            handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + r'\C$\log\PeriodicDataUploads /user:' + wu + r' ' + wup + r' /persistent:no'
-            #handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + r'\C$\log\PeriodicDataUploads /persistent:no'
+            handler_connect_string = (
+                r"net use "
+                + Drive_letter_read
+                + r" \\"
+                + hostname
+                + r"\C$\log\PeriodicDataUploads /user:"
+                + wu
+                + r" "
+                + wup
+                + r" /persistent:no"
+            )
+            # handler_connect_string = r'net use ' + Drive_letter_read + r' \\' + hostname + r'\C$\log\PeriodicDataUploads /persistent:no'
             os.system(handler_connect_string)
-        print("handler_connect_string=",handler_connect_string)
+        print("handler_connect_string=", handler_connect_string)
         ndn = hostname.split("-")[0]
 
         outputfilename = e3.get()
@@ -669,66 +774,72 @@ def copy_files():
             outputdir = kinpath
 
         if method == "Lot_History":
-            inputdir = 'T:/Lot_History'
+            inputdir = "T:/Lot_History"
         elif method == "Warns_Report":
-            inputdir = 'T:'
+            inputdir = "T:"
         else:
             # inputdir for testing
             inputdir = "C:/Anaconda3/matt/kit_file_editing/temp/Lot_History"
         ndn = ndn + "_lot_log_error"
 
-
-        #outputdir = outputdir + "/" + ndn
+        # outputdir = outputdir + "/" + ndn
         if all_handlers_flag == 0:
             outfilename = outputdir + "/" + ndn + "_" + defoutfilename
         else:
             outfilename = outputdir + "/" + "all_" + defoutfilename
-        print("outputdir:",outputdir)
+        print("outputdir:", outputdir)
         if not os.path.exists(outputdir):
             os.makedirs(outputdir)
         if all_handlers_flag < 2:
-            outf = open(outfilename, 'w')
+            outf = open(outfilename, "w")
             if method == "Lot_History":
                 outfile_header_row_Lot_History(outf)
             elif method == "Warns_Report":
                 outfile_header_row_Warns_Report(outf)
             else:
                 outfile_header_row_Lot_History(outf)
-                #outfile_header_row_Warns_Report(outf)
+                # outfile_header_row_Warns_Report(outf)
         if all_handlers_flag == 1:
             all_handlers_flag = 2
 
-        print("inputdir:",inputdir)
-        if not os.path.exists( inputdir ):
-            print("path does not exist on handler: ",inputdir)
+        print("inputdir:", inputdir)
+        if not os.path.exists(inputdir):
+            print("path does not exist on handler: ", inputdir)
             os.system(disconnect_string)
             return
-        dirs = os.listdir( inputdir )
-        #print("*dirs=",dirs)
+        dirs = os.listdir(inputdir)
+        # print("*dirs=",dirs)
         dirst = [os.path.join(inputdir, f) for f in dirs]
-        print("dirst:",dirst)
+        print("dirst:", dirst)
         dirs = []
         for fn in dirst:
             t = os.stat(fn)
-            #print("t=",t)
+            # print("t=",t)
             xt = t.st_ctime
-            #xt = t.st_mtime
-            #print("xt=",xt)
-            #print("reftime=",reftime)
-            #print("history_weeks * week_secs=",int(history_weeks) * week_secs,",reftime - xt=",reftime - xt)
+            # xt = t.st_mtime
+            # print("xt=",xt)
+            # print("reftime=",reftime)
+            # print("history_weeks * week_secs=",int(history_weeks) * week_secs,",reftime - xt=",reftime - xt)
             if reftime - xt > int(history_weeks) * week_secs:
                 continue
-            #print("xt=",xt,",fn=",fn)
+            # print("xt=",xt,",fn=",fn)
             dirs.append(fn)
 
         ##dirlist = [(time.ctime(x[1].st_ctime), x[0]) for x in sorted([(fn, os.stat(fn)) for fn in dirs], key = lambda x: x[1].st_ctime, reverse=True)]
-        print("**dirs=",dirs)
-        dirlist = [(x[1].st_ctime, x[0]) for x in sorted([(fn, os.stat(fn)) for fn in dirs], key = lambda x: x[1].st_ctime, reverse=True)]
+        print("**dirs=", dirs)
+        dirlist = [
+            (x[1].st_ctime, x[0])
+            for x in sorted(
+                [(fn, os.stat(fn)) for fn in dirs],
+                key=lambda x: x[1].st_ctime,
+                reverse=True,
+            )
+        ]
         n = 0
-        print("Max_files=",max_files," history_weeks=",history_weeks)
-        #print("dirlist=",dirlist)
-        for (ftime,file) in dirlist:
-            #print("--file = ",file,"\n")
+        print("Max_files=", max_files, " history_weeks=", history_weeks)
+        # print("dirlist=",dirlist)
+        for (ftime, file) in dirlist:
+            # print("--file = ",file,"\n")
             n = n + 1
             if max_files != "" and max_files != "0":
                 if n > int(max_files):
@@ -737,22 +848,22 @@ def copy_files():
             if reftime - ftime > int(history_weeks) * week_secs:
                 print("exceeds file age\n")
                 break
-            print("ftime=",time.ctime(ftime), "file=",file)
-            #if "Warns-Report" not in file:
-                #continue
-            #origfile = inputdir + "/" + file
-            #newfile = outputdir + "/" + file
-            #print("inputdir=",inputdir,",file=",file)
-            #print("copy ",origfile," to ",newfile)
-            #copyfile(origfile, newfile)
-            #parse_file_new(file,outf)
+            print("ftime=", time.ctime(ftime), "file=", file)
+            # if "Warns-Report" not in file:
+            # continue
+            # origfile = inputdir + "/" + file
+            # newfile = outputdir + "/" + file
+            # print("inputdir=",inputdir,",file=",file)
+            # print("copy ",origfile," to ",newfile)
+            # copyfile(origfile, newfile)
+            # parse_file_new(file,outf)
             if method == "Lot_History":
-                parse_file_Lot_History(file,outf)
-                #print("parse_Lot_History")
+                parse_file_Lot_History(file, outf)
+                # print("parse_Lot_History")
             elif method == "Warns_Report":
-                parse_file_Warns_Report(file,outf)
-                #print("parse_file_Warns")
-            #break
+                parse_file_Warns_Report(file, outf)
+                # print("parse_file_Warns")
+            # break
 
         os.system(disconnect_string)
         print(("reftime =", reftime))
@@ -765,6 +876,7 @@ def copy_files():
         e4.update()
 
     return
+
 
 def parse_alarm(line):
     field = []
@@ -786,7 +898,8 @@ def parse_alarm(line):
             else:
                 fval = fval + line[l]
     field.append(fval)
-    return(field)
+    return field
+
 
 def parse_line_csv(line):
     field = []
@@ -794,7 +907,7 @@ def parse_line_csv(line):
     qs = -1
     fval = ""
     for l in range(len(line)):
-        if line[l] == "\"":
+        if line[l] == '"':
             qs = qs * -1
         elif line[l] == "," and qs < 0:
             field.append(fval)
@@ -803,7 +916,8 @@ def parse_line_csv(line):
         else:
             fval = fval + line[l]
     field.append(fval)
-    return(field)
+    return field
+
 
 def one_handler():
     global all_handlers_flag
@@ -815,20 +929,22 @@ def one_handler():
     e4.insert(0, "task complete")
     return
 
+
 def all_handlers():
     global all_handlers_flag
     global outf
 
     print("all_handlers")
     all_handlers_flag = 1
-    #check_connections()
+    # check_connections()
     for handler_name in handler_list:
         handler.set(handler_name)
-        print("handler.name=",handler.get())
+        print("handler.name=", handler.get())
         copy_files()
     outf.close()
     e4.insert(0, "task complete")
     return
+
 
 def get_updatekitfilename():
     global updatekitfilename
@@ -837,15 +953,17 @@ def get_updatekitfilename():
     e3.insert(0, updatekitfilename)
     return
 
+
 def exit_program():
-    disconnect_string = r'net use ' + Drive_letter_read + r' /del /y'
+    disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(disconnect_string)
-    disconnect_string = r'net use ' + Drive_letter_write + r' /del /y'
+    disconnect_string = r"net use " + Drive_letter_write + r" /del /y"
     os.system(disconnect_string)
-    #os.system(r'net use t: /del /y')
-    #os.system(r'net use s: /del /y')
+    # os.system(r'net use t: /del /y')
+    # os.system(r'net use s: /del /y')
     root.quit()
     return
+
 
 def build_control_window():
     global e1
@@ -866,7 +984,7 @@ def build_control_window():
     getfiletype = StringVar()
     getfiletype.set("Lot")
     l1 = LabelFrame(body, text="handler name")
-    e1 = OptionMenu(l1,handler,*handler_list)
+    e1 = OptionMenu(l1, handler, *handler_list)
     l1.pack()
     e1.pack(side=LEFT)
 
@@ -875,18 +993,18 @@ def build_control_window():
 
     l2 = LabelFrame(body, text="History (Weeks)")
     e2 = Entry(l2)
-    #e2_1 = Radiobutton(l2, text="Lot", variable=getfiletype, value="Lot")
-    #e2_2 = Radiobutton(l2, text="System", variable=getfiletype, value="System")
-    #e2_3 = Radiobutton(l2, text="Test", variable=getfiletype, value="Test")
+    # e2_1 = Radiobutton(l2, text="Lot", variable=getfiletype, value="Lot")
+    # e2_2 = Radiobutton(l2, text="System", variable=getfiletype, value="System")
+    # e2_3 = Radiobutton(l2, text="Test", variable=getfiletype, value="Test")
     l2.pack()
     e2.pack(side=LEFT)
     l4 = LabelFrame(body, text="connection_status")
     e4 = Listbox(l4)
     l4.pack(fill=BOTH, expand=1)
     e4.pack(side=LEFT, fill=BOTH, expand=1)
-    #e2_1.pack(side=LEFT)
-    #e2_2.pack(side=LEFT)
-    #e2_3.pack(side=LEFT)
+    # e2_1.pack(side=LEFT)
+    # e2_2.pack(side=LEFT)
+    # e2_3.pack(side=LEFT)
     l3 = LabelFrame(body, text="output directory")
     e3 = Entry(l3)
     fb3 = Button(l3, text="browse", command=get_updatekitfilename)
@@ -905,10 +1023,18 @@ def build_control_window():
     menu = Frame(root)
     menu.pack()
     menu.b1 = Button(menu, text="Quit", fg="red", command=exit_program)
-    menu.b2 = Button(menu, text="one handler alarm data", fg="green", command=one_handler)
-    menu.b3 = Button(menu, text="all handler alarm data", fg="green", command=all_handlers)
-    menu.b4 = Button(menu, text="detailed connections check", fg="green", command=check_connections)
-    menu.b5 = Button(menu, text="ping network connections", fg="green", command=ping_connections)
+    menu.b2 = Button(
+        menu, text="one handler alarm data", fg="green", command=one_handler
+    )
+    menu.b3 = Button(
+        menu, text="all handler alarm data", fg="green", command=all_handlers
+    )
+    menu.b4 = Button(
+        menu, text="detailed connections check", fg="green", command=check_connections
+    )
+    menu.b5 = Button(
+        menu, text="ping network connections", fg="green", command=ping_connections
+    )
     menu.b1.pack(side=TOP)
     menu.b4.pack(side=TOP)
     menu.b5.pack(side=TOP)
@@ -926,12 +1052,13 @@ def build_control_window():
 
     return
 
+
 build_control_window()
 root.mainloop()
 
-#if py3:
-    #input("program complete.  Hit 'Enter' to close")
-#else:
-    #raw_input("program complete.  Hit 'Enter' to close")
+# if py3:
+# input("program complete.  Hit 'Enter' to close")
+# else:
+# raw_input("program complete.  Hit 'Enter' to close")
 
 ## end of program
