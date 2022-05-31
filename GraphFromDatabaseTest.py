@@ -1,3 +1,4 @@
+from pickle import TRUE
 import cx_Oracle
 import os
 import csv
@@ -15,40 +16,57 @@ connect_string = (
 )
 # connect to oracle
 conn = cx_Oracle.connect(connect_string)
-
 cursor = conn.cursor()
 
 # create graph of 10 most common all time
 # data_select = "SELECT ALID, COUNT(ALID) AS COUNT FROM MTX_ALARM_LOG GROUP BY ALID"
-data_select = "SELECT WEEK, HANDLERNAME, COUNT(ALID) AS COUNT FROM MTX_ALARM_LOG GROUP BY HANDLERNAME, WEEK"
+data_select = "SELECT HANDLERNAME, ALID, ALARMTEXT AS DESCRIPTION, ELAPSEDTIME AS DURATION FROM MTX_ALARM_LOG"
 
 sql_query = pd.read_sql_query(data_select, conn)
-data = pd.DataFrame(sql_query, columns=["HANDLERNAME", "COUNT", "WEEK"])
+df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID", "DURATION"])
+df["COUNT"] = 1
+# X = df["HANDLERNAME"].sort_values(ascending=True).unique()
 
-X1
+# Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
 
-X_ALID = data["HANDLERNAME"]
-Y_ALID = data["COUNT"]
+# for each_code in Unique_ALID:
+#     Y=df[]
+# # Y = df["ALID"].loc[df["HANDLERNAME"] == each_handler]
+# # Y.groupby(["ALID"])
+occurence_df = df.groupby(["ALID", "HANDLERNAME"]).count()["COUNT"]
+duration_df = df.groupby(["HANDLERNAME", "ALID"]).sum()["DURATION"]
 
-print("X:", X_ALID)
-print("Y:", Y_ALID)
+occurence_df = occurence_df.to_numpy()
+print(occurence_df)
 
-fig, ax = plt.subplots()
-ax.bar(X_ALID, Y_ALID)
-plt.xlabel("Handler")
-plt.ylabel("Number of Alarms")
+# print("DURATION DF: \n", duration_df)  # test
+# print("OCCURENCE DF: \n", occurence_df)  # test
 
-plt.show()
+# occurence_df.plot.bar(x="HANDLERNAME", y="ALID", stacked=True)
+# plt.show()
 
-# most_common = {}
-# most_duration = {}
 
-# for each in cursor.execute(data_select):
-#     handler = each[0]
-#     alarm_id = each[1]
-#     duration = each[2]
+# BRUTE FORCE
+# data = cursor.execute(data_select)
 
-#     if alarm_id in most_common:
-#         most_common[alarm_id] = most_common[alarm_id] + 1
-#     if alarm_id not in most_common:
-#         most_common[alarm_id] = 1
+# occurence_count = dict()
+# duration_count = dict()
+
+# # for row in data:
+#     handler = row[0]
+#     alarm = str(row[1])
+#     try:
+#         duration = int(row[3])
+#     except TypeError:
+#         pass
+
+#     handler_alarm = handler + "_" + alarm
+#     # print(handler_alarm) #test
+#     if handler_alarm not in occurence_count:
+#         occurence_count[handler_alarm] = 1
+#     if handler_alarm in occurence_count:
+#         occurence_count[handler_alarm] = occurence_count[handler_alarm] + 1
+#     if handler_alarm not in duration_count:
+#         duration_count[handler_alarm] = duration
+#     if handler_alarm in duration_count:
+#         duration_count[handler_alarm] = duration_count[handler_alarm] + duration

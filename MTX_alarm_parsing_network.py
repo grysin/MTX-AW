@@ -247,11 +247,6 @@ def Update_window(message, color="red"):
     return
 
 
-#
-#
-## end automatic revision update
-
-
 def parse_file_Warns_Report(fname, outf):
     print("parse_file_Warns_Report(", fname, ",", outf, "):")
     f = open(fname, "r")
