@@ -1,4 +1,6 @@
+from cProfile import label
 from pickle import TRUE
+from unicodedata import name
 import cx_Oracle
 import os
 import csv
@@ -19,32 +21,64 @@ conn = cx_Oracle.connect(connect_string)
 cursor = conn.cursor()
 
 # create graph of 10 most common all time
-# data_select = "SELECT ALID, COUNT(ALID) AS COUNT FROM MTX_ALARM_LOG GROUP BY ALID"
-data_select = "SELECT HANDLERNAME, ALID, ALARMTEXT AS DESCRIPTION, ELAPSEDTIME AS DURATION FROM MTX_ALARM_LOG"
+data_select = "SELECT ALID, HANDLERNAME, COUNT(ALID) AS COUNT FROM MTX_ALARM_LOG GROUP BY ALID, HANDLERNAME"
+# data_select = "SELECT HANDLERNAME, ALID, ALARMTEXT AS DESCRIPTION, ELAPSEDTIME AS DURATION FROM MTX_ALARM_LOG"
 
 sql_query = pd.read_sql_query(data_select, conn)
-df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID", "DURATION"])
-df["COUNT"] = 1
-# X = df["HANDLERNAME"].sort_values(ascending=True).unique()
+df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID", "COUNT"])
 
-# Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
+print(df)
 
+Handlers = df["HANDLERNAME"].sort_values(ascending=True).unique()
+Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
+
+
+# fig, axes = plt.subplots()
+
+# for each_handler in Handlers:
+#     # go through the database and find the 10 most common error codes for each handler, plot all on one figure
+#     table_data = df[["ALID", "COUNT"]].loc[df["HANDLERNAME"] == each_handler]
+#     # go through the database and find the 10 highest sum duration error codes
+#     # print("HANDLER:", each_handler)
+
+#     # axes.bar()
+#     table_data = table_data[["ALID", "COUNT"]].sort_values("COUNT", ascending=False)
+#     # table_data.plot(
+#     #     ax=axes,
+#     #     x="ALID",
+#     #     y="COUNT",
+#     #     kind="bar",
+#     #     stacked=True,
+#     #     label=each_handler,
+
+#     # )
+#     # table_data = table_data.to_numpy()
+#     print(table_data)
+# # plt.show()
+
+# # print(Unique_ALID)
 # for each_code in Unique_ALID:
-#     Y=df[]
+#     # go through the database and find the 10 most common error codes
+
+#     # go through the database and find the 10 highest sum duration error codes
+#     print(each_code)
+#     # Y = df.loc[df["ALID"] == each_code]
+#     Y = df.where(df["ALID"] == each_code)
+#     print(Y)
+#     # ax.bar(X, Y, title=each_code)
+
+# plt.show()
+
 # # Y = df["ALID"].loc[df["HANDLERNAME"] == each_handler]
 # # Y.groupby(["ALID"])
-occurence_df = df.groupby(["ALID", "HANDLERNAME"]).count()["COUNT"]
-duration_df = df.groupby(["HANDLERNAME", "ALID"]).sum()["DURATION"]
+# occurence_df = df.groupby(["ALID", "HANDLERNAME"]).count()["COUNT"]
+# duration_df = df.groupby(["HANDLERNAME", "ALID"]).sum()["DURATION"]
 
-occurence_df = occurence_df.to_numpy()
-print(occurence_df)
+# # occurence_df = occurence_df.to_numpy()
+# print(occurence_df)
 
 # print("DURATION DF: \n", duration_df)  # test
 # print("OCCURENCE DF: \n", occurence_df)  # test
-
-# occurence_df.plot.bar(x="HANDLERNAME", y="ALID", stacked=True)
-# plt.show()
-
 
 # BRUTE FORCE
 # data = cursor.execute(data_select)
