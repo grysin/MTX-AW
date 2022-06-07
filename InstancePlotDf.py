@@ -29,6 +29,11 @@ print(Handlers)
 Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
 
 instance_data = pd.DataFrame(columns=Handlers)
+
+fig = plt.figure(
+    num="Instances of ALIDs", figsize=(22, 10), dpi=80, facecolor="w", edgecolor="k"
+)
+fig.canvas.set_window_title("Instances")
 for alid in Unique_ALID:
     Y = list()
     for handler in Handlers:
@@ -44,3 +49,8 @@ for alid in Unique_ALID:
         count = result[0][0]
         Y.append(count)
     instance_data.loc[alid] = Y
+    plt.bar(Handlers, Y, label=alid)
+plt.title("Instances of Alarm Codes")
+plt.xlabel("Handler")
+plt.ylabel("Number of Times Alarm Occured")
+plt.show()

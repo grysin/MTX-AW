@@ -28,6 +28,8 @@ df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID"])
 Handlers = df["HANDLERNAME"].sort_values(ascending=True).unique()
 Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
 
+fig, ax = plt.figure()
+
 duration_data = pd.DataFrame(columns=Handlers)
 for alid in Unique_ALID:
     Y = list()
@@ -52,3 +54,9 @@ for alid in Unique_ALID:
         Y.append(duration_total)
     # print(Y)
     duration_data.loc[alid] = Y
+    plt.bar(Handlers, Y, label=alid)
+plt.title("Duration of Alarm Codes")
+plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+plt.xlabel("Handler")
+plt.ylable("Time (sec)")
+plt.show()
