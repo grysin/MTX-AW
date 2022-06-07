@@ -33,20 +33,23 @@ for alid in Unique_ALID:
     Y = list()
     for handler in Handlers:
         statement = (
-            "SELECT NVL(ELAPSEDTIME,0) AS ELAPSEDTIME FROM MTX_ALARM_LOG WHERE HANDLERNAME = '"
+            "SELECT SUM(NVL(ELAPSEDTIME,0)) AS ELAPSEDTIME FROM MTX_ALARM_LOG WHERE HANDLERNAME = '"
             + str(handler)
             + "' AND ALID = '"
             + str(alid)
             + "'"
         )
-        print(statement)
+        # print(statement)
         cursor.execute(statement)
-        result = cursor.fetchall()
-
-        print("result: ", result)
-        a = 1 / 0
-
-
-#         Y.append(count)
-#     duration_data.loc[alid] = Y
-# print(duration_data)
+        result = cursor.fetchone()
+        duration_total = result[0]
+        # print("initial: ", duration_total)
+        try:
+            int(duration_total)
+        except TypeError:
+            duration_total = 0
+        # print("after: ", duration_total)
+        Y.append(duration_total)
+    # print(Y)
+    duration_data.loc[alid] = Y
+print(duration_data)
