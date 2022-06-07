@@ -19,7 +19,7 @@ conn = cx_Oracle.connect(connect_string)
 cursor = conn.cursor()
 
 # choose csv file to add to database
-file = "all_results.csv"
+file = "all_results6_7_2022.csv"
 # open the file
 with open(file) as csv_file:
     # read the file

@@ -52,4 +52,3 @@ for alid in Unique_ALID:
         Y.append(duration_total)
     # print(Y)
     duration_data.loc[alid] = Y
-print(duration_data)

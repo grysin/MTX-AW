@@ -44,4 +44,3 @@ for alid in Unique_ALID:
         count = result[0][0]
         Y.append(count)
     instance_data.loc[alid] = Y
-print(instance_data)
