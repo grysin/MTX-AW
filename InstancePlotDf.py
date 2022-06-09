@@ -34,6 +34,7 @@ fig = plt.figure(
     num="Instances of ALIDs", figsize=(22, 10), dpi=80, facecolor="w", edgecolor="k"
 )
 fig.canvas.set_window_title("Instances")
+
 for alid in Unique_ALID:
     Y = list()
     for handler in Handlers:
@@ -50,6 +51,9 @@ for alid in Unique_ALID:
         Y.append(count)
     instance_data.loc[alid] = Y
     plt.bar(Handlers, Y, label=alid)
+
+print(instance_data)
+
 plt.title("Instances of Alarm Codes")
 plt.xlabel("Handler")
 plt.ylabel("Number of Times Alarm Occured")

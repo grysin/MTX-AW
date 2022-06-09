@@ -19,7 +19,6 @@ cursor = conn.cursor()
 
 # create graph of 10 most common all time
 data_select = "SELECT ALID, HANDLERNAME, NVL(ELAPSEDTIME,0) AS ELAPSEDTIME FROM MTX_ALARM_LOG ORDER BY ELAPSEDTIME DESC"
-# data_select = "SELECT HANDLERNAME, ALID, ALARMTEXT AS DESCRIPTION, ELAPSEDTIME AS DURATION FROM MTX_ALARM_LOG"
 
 sql_query = pd.read_sql_query(data_select, conn)
 df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID"])
@@ -28,7 +27,7 @@ df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID"])
 Handlers = df["HANDLERNAME"].sort_values(ascending=True).unique()
 Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
 
-fig, ax = plt.figure()
+# fig, ax = plt.figure()
 
 duration_data = pd.DataFrame(columns=Handlers)
 for alid in Unique_ALID:
@@ -54,9 +53,12 @@ for alid in Unique_ALID:
         Y.append(duration_total)
     # print(Y)
     duration_data.loc[alid] = Y
-    plt.bar(Handlers, Y, label=alid)
-plt.title("Duration of Alarm Codes")
-plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
-plt.xlabel("Handler")
-plt.ylable("Time (sec)")
-plt.show()
+#     plt.bar(Handlers, Y, label=alid)
+print(duration_data)
+
+
+# plt.title("Duration of Alarm Codes")
+# plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+# plt.xlabel("Handler")
+# plt.ylable("Time (sec)")
+# plt.show()
