@@ -18,7 +18,7 @@ conn = cx_Oracle.connect(connect_string)
 cursor = conn.cursor()
 
 # create graph of 10 most common all time
-data_select = "SELECT ALID, HANDLERNAME, COUNT(ALID) AS COUNT FROM MTX_ALARM_LOG GROUP BY ALID, HANDLERNAME"
+data_select = "SELECT ALID, HANDLERNAME, COUNT(ALID) AS COUNT FROM MTX_JAM_STAT_DATA GROUP BY ALID, HANDLERNAME"
 # data_select = "SELECT HANDLERNAME, ALID, ALARMTEXT AS DESCRIPTION, ELAPSEDTIME AS DURATION FROM MTX_ALARM_LOG"
 
 sql_query = pd.read_sql_query(data_select, conn)
@@ -30,16 +30,18 @@ Unique_ALID = df["ALID"].sort_values(ascending=True).unique()
 
 instance_data = pd.DataFrame(columns=Handlers)
 
-fig = plt.figure(
-    num="Instances of ALIDs", figsize=(22, 10), dpi=80, facecolor="w", edgecolor="k"
-)
-fig.canvas.set_window_title("Instances")
+# fig = plt.figure(
+#     num="Instances of ALIDs", figsize=(22, 10), dpi=80, facecolor="w", edgecolor="k"
+# )
+# fig.canvas.set_window_title("Instances")
+
+# fig, ax = plt.subplots()
 
 for alid in Unique_ALID:
     Y = list()
     for handler in Handlers:
         statement = (
-            "SELECT COUNT(ALID) AS COUNT FROM MTX_ALARM_LOG WHERE HANDLERNAME = '"
+            "SELECT COUNT(ALID) AS COUNT FROM MTX_JAM_STAT_DATA WHERE HANDLERNAME = '"
             + str(handler)
             + "' AND ALID = '"
             + str(alid)
@@ -50,11 +52,15 @@ for alid in Unique_ALID:
         count = result[0][0]
         Y.append(count)
     instance_data.loc[alid] = Y
-    plt.bar(Handlers, Y, label=alid)
+    # plt.bar(Handlers, Y, label=alid)
 
-print(instance_data)
+for handler in Handlers:
+    loop_df = instance_data[handler]
+    print(handler, "\n", "-----------")
+    print(loop_df.nlargest(n=10), "\n")
 
-plt.title("Instances of Alarm Codes")
-plt.xlabel("Handler")
-plt.ylabel("Number of Times Alarm Occured")
-plt.show()
+# plt.title("Instances of Alarm Codes")
+# plt.xlabel("Handler")
+# plt.ylabel("Number of Times Alarm Occured")
+# plt.legend()
+# plt.show()

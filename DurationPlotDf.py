@@ -18,7 +18,7 @@ conn = cx_Oracle.connect(connect_string)
 cursor = conn.cursor()
 
 # create graph of 10 most common all time
-data_select = "SELECT ALID, HANDLERNAME, NVL(ELAPSEDTIME,0) AS ELAPSEDTIME FROM MTX_ALARM_LOG ORDER BY ELAPSEDTIME DESC"
+data_select = "SELECT ALID, HANDLERNAME, NVL(ELAPSEDTIME,0) AS ELAPSEDTIME FROM MTX_JAM_STAT_DATA ORDER BY ELAPSEDTIME DESC"
 
 sql_query = pd.read_sql_query(data_select, conn)
 df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "ALID"])
@@ -34,7 +34,7 @@ for alid in Unique_ALID:
     Y = list()
     for handler in Handlers:
         statement = (
-            "SELECT SUM(NVL(ELAPSEDTIME,0)) AS ELAPSEDTIME FROM MTX_ALARM_LOG WHERE HANDLERNAME = '"
+            "SELECT SUM(NVL(ELAPSEDTIME,0)) AS ELAPSEDTIME FROM MTX_JAM_STAT_DATA WHERE HANDLERNAME = '"
             + str(handler)
             + "' AND ALID = '"
             + str(alid)
