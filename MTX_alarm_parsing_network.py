@@ -976,6 +976,7 @@ def build_control_window():
 
     handler = StringVar()
     handler.set("all")
+    # the only place this variable is used is in copy_files(), not changed anywhere
     getfiletype = StringVar()
     getfiletype.set("Lot")
     l1 = LabelFrame(body, text="handler name")

@@ -120,10 +120,6 @@ calc_table = {}
 dev_setting = {}
 
 ## begin automatic revision update
-#
-#
-
-
 def update_revision():
     global update_win
     try:
@@ -247,18 +243,24 @@ def Update_window(message, color="red"):
     return
 
 
+# parsing warning report file
 def parse_file_Warns_Report(fname, outf):
     print("parse_file_Warns_Report(", fname, ",", outf, "):")
+    # open the file
     f = open(fname, "r")
+    # get the filename
     handlername = handler.get()
     header = 0
     IntID_list = []
     n = 0
     num_warnings = 0
+    # loop through each line in the file
     for line in f:
         print("line=", line)
+        # keep track of line number
         n = n + 1
         # max_warnings = 10
+        # max warnings is set to 10,000 up above after imports
         if num_warnings > max_warnings:
             break
         if "IntID" in line:

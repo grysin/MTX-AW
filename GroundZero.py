@@ -1,7 +1,6 @@
-# Imports
-
 import sys
 from sys import version_info
+from tkinter.ttk import Notebook
 
 py3 = version_info[0] > 2
 
@@ -26,8 +25,6 @@ from datetime import datetime
 from time import sleep
 import cx_Oracle
 
-# Set Oracle Database
-
 cx_Oracle.init_oracle_client(
     lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3"
 )
@@ -39,7 +36,6 @@ root = Tk()
 root.title(program_title + " - " + program_version)
 defbg = root.cget("bg")
 
-# try to pull handler list off of config file, if it fails
 try:
     handler_list = config.handler_list
 except AttributeError:
@@ -56,10 +52,9 @@ except AttributeError:
         "MTXA07",
         "MTXA08",
         "MTXA09",
+        "MTXA10",
     ]
 handler_list.insert(0, "all")
-
-
 try:
     Drive_letter_read = config.Drive_letter_read
 except AttributeError:
@@ -120,9 +115,7 @@ tst_temp = -999
 calc_table = {}
 dev_setting = {}
 
-# Updationg Revision Functions
-
-
+## begin automatic revision update
 def update_revision():
     global update_win
     try:
@@ -228,6 +221,7 @@ def Update_window(message, color="red"):
     update_win.b1 = Button(
         update_win.selections, text="Cancel", fg="red", command=update_win.destroy
     )
+    # update config revision function doesn't exist
     if "config" in message:
         update_win.b2 = Button(
             update_win.selections,
@@ -244,3 +238,48 @@ def Update_window(message, color="red"):
     update_win.b1.pack(side=LEFT)
     update_win.b2.pack(side=RIGHT)
     return
+
+
+tabs = Notebook(root)
+tabs.pack()
+
+data_tab = Frame(tabs)
+data_tab.pack(fill="both", expand=1)
+
+plot_tab = Frame(tabs)
+plot_tab.pack(fill="both", expand=1)
+
+tabs.add(data_tab, text="Retrieve Jam Stats")
+tabs.add(plot_tab, text="Set Plot Paramters")
+
+
+def conf(event):
+    tabs.config(height=root.winfo_height(), width=root.winfo_width())
+
+
+root.bind("<Configure>", conf)
+# geometry = Width*Height
+root.geometry("400x300")
+
+# create variable for handler select menu
+handler_select = StringVar()
+# default value is None
+handler_select.set("None")
+
+# create the label frame, box for handler select menu, put it in the data tab
+handler_select_frame = LabelFrame(data_tab, text="Retrieve Data From...")
+# create the option menu, put it in the handler label frame, default value and list values
+handler_option_menu = OptionMenu(handler_select_frame, handler_select, *handler_list)
+handler_option_menu.config(width=20)
+# put the handler label frame on the screen
+handler_select_frame.pack()
+# put the menu on the screen
+handler_option_menu.pack()
+
+history_select_frame = LabelFrame(data_tab, text="Select Date Range")
+history_select_frame.pack()
+
+history_select_entry = Entry(history_select_frame)
+history_select_entry.pack()
+
+root.mainloop()
