@@ -19,6 +19,7 @@ from pprint import pprint
 if py3:
     from tkinter import *
     from tkinter.filedialog import *
+    from tkinter import ttk
 else:
     from Tkinter import *
     from tkFileDialog import *
@@ -34,7 +35,7 @@ cx_Oracle.init_oracle_client(
 
 program_name = "matrix_lot_log_alarm_extractor_shared_folder"
 program_version = "20220426"
-program_title = "matrix alarm extractor"
+program_title = "MTX JAM Stat Analysis"
 root = Tk()
 root.title(program_title + " - " + program_version)
 defbg = root.cget("bg")
@@ -132,7 +133,7 @@ def update_revision():
         print("update_window not open")
     disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(str(disconnect_string))
-    cn_status.config(text="not connected", bg=defbg)
+    # cn_status.config(text="not connected", bg=defbg)
 
     if os.system("ping -n 1 " + "Npi1412-09") == 0:
         rev_hist_connect_string = (
@@ -180,7 +181,7 @@ def update_revision():
 def check_revision_update(notify_if_uptodate=1):
     disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(str(disconnect_string))
-    cn_status.config(text="not connected", bg=defbg)
+    # cn_status.config(text="not connected", bg=defbg)
     if os.system("ping -n 1 " + "Npi1412-09") == 0:
         rev_hist_connect_string = (
             r"net use " + Drive_letter_read + r" " + release_archives
@@ -559,7 +560,7 @@ def Read_matrix_alarm_text_lookup():
 def connect_handlers(hostname="checklist", lwu="", lwup=""):
     global inputInitialDir
     global ndn
-    global cn_status
+    # global cn_status
 
     if hostname == "checklist":
         hostname = handler.get()
@@ -580,7 +581,7 @@ def connect_handlers(hostname="checklist", lwu="", lwup=""):
 def connect_handler(hostname="checklist", lwu="", lwup=""):
     global inputInitialDir
     global ndn
-    global cn_status
+    # global cn_status
     global connect_path
 
     if hostname == "all":
@@ -600,7 +601,7 @@ def connect_handler(hostname="checklist", lwu="", lwup=""):
 
     disconnect_string = r"net use " + Drive_letter_read + r" /del /y"
     os.system(disconnect_string)
-    cn_status.config(text="not connected", bg=defbg)
+    # cn_status.config(text="not connected", bg=defbg)
     sleep(8)
 
     ndn = "ERROR"
@@ -642,20 +643,20 @@ def connect_handler(hostname="checklist", lwu="", lwup=""):
 
         if os.path.exists(inputInitialDir):
             # update HERE
-            cn_status.config(text="connected to %s" % ndn, bg="blue")
+            # cn_status.config(text="connected to %s" % ndn, bg="blue")
             print(("connected to " + ndn))
             e4.insert(0, lwu + " connected to " + hostname + connect_path)
             e4.update()
         else:
             print((hostname, "is NOT connected"))
-            cn_status.config(text="not connected", bg=defbg)
+            # cn_status.config(text="not connected", bg=defbg)
             e4.insert(0, lwu + " is NOT connected to " + hostname + connect_path)
             # Error_window("Error: handler is not connected")
             return 1
 
     else:
         print((hostname, "is NOT reached"))
-        cn_status.config(text="not connected", bg=defbg)
+        # cn_status.config(text="not connected", bg=defbg)
         e4.insert(0, hostname + " is NOT REACHED")
         return 1
     return 0
@@ -960,6 +961,16 @@ def exit_program():
     return
 
 
+def handler_jam_stat_retrieve():
+    handler_select_value = handler.get()
+
+    if handler_select_value == "all":
+        all_handlers()
+    else:
+        one_handler()
+    return
+
+
 def build_control_window():
     global e1
     global e2
@@ -968,10 +979,28 @@ def build_control_window():
     global handler
     global getfiletype
     global ndn
-    global cn_status
+    global tabs
+    # global cn_status
 
     root.minsize(width=300, height=475)
-    body = Frame(root)
+
+    tabs = ttk.Notebook(root)
+    tabs.pack()
+
+    data_tab = Frame(tabs)
+    data_tab.pack(fill="both", expand=1)
+
+    database_tab = Frame(tabs)
+    database_tab.pack(fill="both", expand=1)
+
+    plot_tab = Frame(tabs)
+    plot_tab.pack(fill="both", expand=1)
+
+    tabs.add(data_tab, text="Retrieve Jam Stats")
+    tabs.add(database_tab, text="Store Data")
+    tabs.add(plot_tab, text="Set Plot Paramters")
+
+    body = Frame(data_tab)
     body.pack(fill=BOTH, expand=1)
 
     handler = StringVar()
@@ -979,45 +1008,54 @@ def build_control_window():
     # the only place this variable is used is in copy_files(), not changed anywhere
     getfiletype = StringVar()
     getfiletype.set("Lot")
-    l1 = LabelFrame(body, text="handler name")
+
+    handler_and_history = Frame(body)
+    handler_and_history.pack()
+
+    l1 = LabelFrame(handler_and_history, text="Handler Select")
     e1 = OptionMenu(l1, handler, *handler_list)
-    l1.pack()
-    e1.pack(side=LEFT)
+    l1.pack(side=LEFT, padx=10, pady=10)
+    e1.pack()
 
-    cn_status = Label(body, text="not connected")
-    cn_status.pack(fill=X, expand=1)
+    # cn_status = Label(body, text="not connected")
+    # cn_status.pack(fill=X, expand=1)
 
-    l2 = LabelFrame(body, text="History (Weeks)")
+    l2 = LabelFrame(handler_and_history, text="History (Weeks)")
     e2 = Entry(l2)
     # e2_1 = Radiobutton(l2, text="Lot", variable=getfiletype, value="Lot")
     # e2_2 = Radiobutton(l2, text="System", variable=getfiletype, value="System")
     # e2_3 = Radiobutton(l2, text="Test", variable=getfiletype, value="Test")
-    l2.pack()
-    e2.pack(side=LEFT)
-    l4 = LabelFrame(body, text="connection_status")
-    e4 = Listbox(l4)
-    l4.pack(fill=BOTH, expand=1)
-    e4.pack(side=LEFT, fill=BOTH, expand=1)
-    # e2_1.pack(side=LEFT)
-    # e2_2.pack(side=LEFT)
-    # e2_3.pack(side=LEFT)
-    l3 = LabelFrame(body, text="output directory")
+    l2.pack(side=RIGHT, padx=10, pady=10)
+    e2.pack()
+
+    l3 = LabelFrame(body, text="Output Directory")
     e3 = Entry(l3)
     fb3 = Button(l3, text="browse", command=get_updatekitfilename)
     l3.pack()
     e3.pack(side=LEFT)
     fb3.pack(side=LEFT)
 
+    l4 = LabelFrame(body, text="Connection Status")
+    e4 = Listbox(l4)
+    l4.pack(fill=BOTH, expand=1)
+    e4.pack(side=LEFT, fill=BOTH, expand=1)
+    # e2_1.pack(side=LEFT)
+    # e2_2.pack(side=LEFT)
+    # e2_3.pack(side=LEFT)
+
     selected_handler = handler.get()
     e2.delete(0, END)
     e2.insert(0, history_weeks)
     e4.delete(0, END)
-    e4.insert(0, "none")
+    e4.insert(0, "None")
     e3.delete(0, END)
     e3.insert(0, outputdir)
 
-    menu = Frame(root)
+    menu = Frame(body)
     menu.pack()
+    connections_label = LabelFrame(menu, text="Check Connections")
+    connections_label.pack(side=LEFT, padx=10, pady=10)
+
     menu.b1 = Button(menu, text="Quit", fg="red", command=exit_program)
     menu.b2 = Button(
         menu, text="one handler alarm data", fg="green", command=one_handler
@@ -1026,16 +1064,23 @@ def build_control_window():
         menu, text="all handler alarm data", fg="green", command=all_handlers
     )
     menu.b4 = Button(
-        menu, text="detailed connections check", fg="green", command=check_connections
+        connections_label, text="Detailed", fg="green", command=check_connections
     )
     menu.b5 = Button(
-        menu, text="ping network connections", fg="green", command=ping_connections
+        connections_label, text="Quick", fg="green", command=ping_connections
     )
-    menu.b1.pack(side=TOP)
-    menu.b4.pack(side=TOP)
-    menu.b5.pack(side=TOP)
-    menu.b2.pack(side=TOP)
-    menu.b3.pack(side=TOP)
+    menu.b6 = Button(
+        menu, text="Retrieve Jam Stats", fg="green", command=handler_jam_stat_retrieve
+    )
+    menu.b4.pack(side=LEFT)
+    menu.b5.pack(side=RIGHT)
+    menu.b1.pack(side=RIGHT)
+    menu.b6.pack(side=LEFT, padx=20)
+
+    # menu.b4.pack(side=TOP)
+    # menu.b5.pack(side=TOP)
+    # menu.b2.pack(side=TOP)
+    # menu.b3.pack(side=TOP)
 
     menubar = Menu(root)
     helpmenu = Menu(menubar, tearoff=0)
@@ -1048,6 +1093,14 @@ def build_control_window():
 
     return
 
+
+def conf(event):
+    tabs.config(height=root.winfo_height(), width=root.winfo_width())
+
+
+root.bind("<Configure>", conf)
+# geometry = Width*Height
+root.geometry("400x300")
 
 build_control_window()
 root.mainloop()

@@ -272,14 +272,22 @@ handler_select_frame = LabelFrame(data_tab, text="Retrieve Data From...")
 handler_option_menu = OptionMenu(handler_select_frame, handler_select, *handler_list)
 handler_option_menu.config(width=20)
 # put the handler label frame on the screen
-handler_select_frame.pack()
+handler_select_frame.pack(side=LEFT)
 # put the menu on the screen
 handler_option_menu.pack()
 
 history_select_frame = LabelFrame(data_tab, text="Select Date Range")
-history_select_frame.pack()
+history_select_frame.pack(side=RIGHT)
 
 history_select_entry = Entry(history_select_frame)
-history_select_entry.pack()
+history_select_entry.insert(0, "Enter start date")
+history_select_entry.pack(side=LEFT)
+
+history_select_entry2 = Entry(history_select_frame)
+history_select_entry2.insert(0, "Enter end date")
+history_select_entry2.pack(side=RIGHT)
+
+body = Frame(data_tab)
+cn_status = Label(body)
 
 root.mainloop()
