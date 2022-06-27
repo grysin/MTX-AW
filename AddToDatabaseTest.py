@@ -99,7 +99,7 @@ with open(file) as csv_file:
         except ValueError:
             settime = str(len(""))
 
-        sql_insert = "INSERT INTO MTX_ALARM_LOG(FNAME, KIT, TEST, SYSTEM, SETPOINT, JOB_TIME, JOB_TIME_READABLE,"
+        sql_insert = "INSERT INTO MTX_JAM_STAT_DATA(FNAME, KIT, TEST, SYSTEM, SETPOINT, JOB_TIME, JOB_TIME_READABLE,"
         sql_insert = (
             sql_insert
             + " END_TIME, END_TIME_READABLE, HANDLERNAME, DAYOFWEEK, MONTH, WEEK, QUARTER, YEAR,"

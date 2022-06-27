@@ -13,6 +13,7 @@ import os
 import time
 import handler_kit_Tsense_calibrate_config as config
 import shutil
+import csv
 
 from pprint import pprint
 
@@ -103,8 +104,8 @@ Alarm_text = {}
 all_handlers_flag = 0
 outf = 0  # should this be a zero?
 Drive_letter_read = "t:"
-wu = "fsl\\ultraflexdev"
-wup = "Development1"
+wu = "handler"
+wup = "Password"
 
 if sys.argv[1:]:
     inputresultsfilename = sys.argv[1]
@@ -294,6 +295,7 @@ def parse_file_Warns_Report(fname, outf):
 def parse_file_Lot_History(fname, outf):
     print("parse_file_Lot_History(", fname, ",", outf, "):")
     f = open(fname, "r")
+
     handlername = handler.get()
 
     for line in f:
@@ -971,6 +973,265 @@ def handler_jam_stat_retrieve():
     return
 
 
+def send_to_database():
+    global db_file_to_send
+    global db_status
+    # set Oracle client
+    # cx_Oracle.init_oracle_client(
+    #     lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3"
+    # )
+    # connection string
+    connect_string = "gntcaadm/gntcaadm01@OHNTWEBDB_VCS.am.freescale.net:1522/OHNTWEB.AM.FREESCALE.NET"
+    # connect to oracle
+    conn = cx_Oracle.connect(connect_string)
+    cursor = conn.cursor()
+    db_status.insert(0, "Connected to Oracle")
+    db_status.update()
+
+    # choose csv file to add to database
+    file = db_file_to_send
+    # open the file
+    with open(file) as csv_file:
+        # read the file
+        csv_data = csv.reader(csv_file)
+        db_status.insert(0, "File is being read")
+        db_status.update()
+        # each row is a list
+        csv_rows = list(csv_data)
+        # first row is the header
+        header = csv_rows[0]
+        # the rest is actual data
+        alarms = csv_rows[1:]
+        num_csv_rows = str(len(alarms))
+        num_rows_statemnt = num_csv_rows + " alarm instances in the selected file"
+        db_status.insert(0, num_rows_statemnt)
+        db_status.update()
+        csv_rows_count = 1
+        # test row
+        test_row = alarms[1]
+        # print("test row: \n", test_row)
+        duplicate_count = 0
+        for row in alarms:
+            fname = row[0]
+            kit = row[1]
+            test = row[2]
+            system = row[3]
+            setpoint = row[4]
+            jobtime = row[5]
+            job_time_readable = row[6]
+            endtime = row[7]
+            end_time_readable = row[8]
+            handlername = row[9]
+            dayofweek = row[10]
+            month = row[11]
+            week = row[12]
+            quarter = row[13]
+            year = row[14]
+            intid = row[15]
+            alid = row[16]
+            alarm_text = row[17]
+            lotparts = row[18]
+            subid = row[19]
+            source = row[20]
+            csv_type = row[21]
+            csv_class = row[22]
+            csv_subclass = row[23]
+            unknown1 = row[24]
+            arg1 = row[25]
+            arg2 = row[26]
+            rebootcount = row[27]
+            reinitcount = row[28]
+            retrycount = row[29]
+            clearcount = row[30]
+            settime = row[31]
+            clearedtime = row[32]
+            settime_readable = row[33]
+            clearedtime_readable = row[34]
+            elapsedtime = row[35]
+            unknown2 = row[36]
+            unknown3 = row[37]
+            unknown4 = row[38]
+            temperature = row[39]
+            e10mode = row[40]
+            opmode = row[41]
+            stationmode = row[42]
+            testermode = row[43]
+            airplow = row[44]
+            partcount = row[45]
+            cyclecount = row[46]
+            unknown5 = row[47]
+            userid = row[48]
+            handlerid = row[49]
+            siteid = row[50]
+
+            try:
+                int(clearedtime)
+                str(clearedtime)
+            except ValueError:
+                clearedtime = str(len(""))
+
+            try:
+                int(settime)
+                str(settime)
+            except ValueError:
+                settime = str(len(""))
+
+            sql_insert = "INSERT INTO MTX_JAM_STAT_DATA(FNAME, KIT, TEST, SYSTEM, SETPOINT, JOB_TIME, JOB_TIME_READABLE,"
+            sql_insert = (
+                sql_insert
+                + " END_TIME, END_TIME_READABLE, HANDLERNAME, DAYOFWEEK, MONTH, WEEK, QUARTER, YEAR,"
+            )
+            sql_insert = (
+                sql_insert
+                + " INTID, ALID, ALARMTEXT, LOTPARTS, SUBID, SOURCE, TYPE, CLASS, SUBCLASS, UNKNOWN1,"
+            )
+            sql_insert = (
+                sql_insert
+                + " ARG1, ARG2, REBOOTCOUNT, REINITCOUNT, RETRYCOUNT, CLEARCOUNT, SET_TIME, CLEARED_TIME,"
+            )
+            sql_insert = (
+                sql_insert
+                + " SET_READABLE, CLEARED_READABLE, ELAPSEDTIME, UNKNOWN2, UNKNOWN3, UNKNOWN4, TEMPERATURE, E10MODE, OPMODE,"
+            )
+            sql_insert = (
+                sql_insert
+                + " STATIONMODE, TESTERMODE, AIRPLOW, PARTCOUNT, CYCLECOUNT, UNKNOWN5, USERID, HANDLERID, SITEID)"
+            )
+            # print("\n")
+            # print(sql_insert)
+
+            sql_insert = (
+                sql_insert
+                + " VALUES(q'["
+                + fname
+                + "]','"
+                + kit
+                + "','"
+                + test
+                + "','"
+                + system
+                + "',"
+                + setpoint
+                + ","
+                + jobtime
+                + ", q'["
+                + job_time_readable
+                + "]',"
+                + endtime
+                + ", q'["
+                + end_time_readable
+                + "]','"
+                + handlername
+                + "',"
+                + dayofweek
+                + ","
+                + month
+                + ","
+                + week
+                + ","
+                + quarter
+                + ","
+                + year
+                + ","
+                + intid
+                + ","
+                + alid
+                + ", q'["
+                + alarm_text
+                + "]',"
+                + lotparts
+                + ", q'["
+                + subid
+                + "]',"
+                + source
+                + ",'"
+                + csv_type
+                + "','"
+                + csv_class
+                + "','"
+                + csv_subclass
+                + "','"
+                + unknown1
+                + "','"
+                + arg1
+                + "','"
+                + arg2
+                + "',"
+                + rebootcount
+                + ","
+                + reinitcount
+                + ","
+                + retrycount
+                + ","
+                + clearcount
+                + ","
+                + settime
+                + ","
+                + clearedtime
+                + ", q'["
+                + settime_readable
+                + "]', q'["
+                + clearedtime_readable
+                + "]',"
+                + elapsedtime
+                + ","
+                + unknown2
+                + ","
+                + unknown3
+                + ","
+                + unknown4
+                + ","
+                + temperature
+                + ",'"
+                + e10mode
+                + "','"
+                + opmode
+                + "',"
+                + stationmode
+                + ","
+                + testermode
+                + ","
+                + airplow
+                + ","
+                + partcount
+                + ","
+                + cyclecount
+                + ",'"
+                + unknown5
+                + "','"
+                + userid
+                + "','"
+                + handlerid
+                + "','"
+                + siteid
+                + "')"
+            )
+
+            # print("\n")
+            # print(sql_insert)
+            # print("\n")
+            try:
+                cursor.execute(sql_insert)
+            except cx_Oracle.IntegrityError:
+                duplicate_count = duplicate_count+1
+                #print("Duplicate")
+                pass
+        conn.commit()
+        duplicate_statement = str(duplicate_count) + " of " + num_csv_rows + " were duplicates"
+        db_status.insert(0, duplicate_statement)
+        db_status.insert(0, "Task Complete")
+        db_status.update()
+    return
+
+
+def file_to_database_browse():
+    global db_file_to_send
+    db_file_to_send = askopenfilename(filetypes=[("CSV files", "*.csv")])
+    file_select.delete(0, END)
+    file_select.insert(0, db_file_to_send)
+    return
+
+
 def build_control_window():
     global e1
     global e2
@@ -980,6 +1241,8 @@ def build_control_window():
     global getfiletype
     global ndn
     global tabs
+    global file_select
+    global db_status
     # global cn_status
 
     root.minsize(width=300, height=475)
@@ -1000,6 +1263,7 @@ def build_control_window():
     tabs.add(database_tab, text="Store Data")
     tabs.add(plot_tab, text="Set Plot Paramters")
 
+    # DATA TAB
     body = Frame(data_tab)
     body.pack(fill=BOTH, expand=1)
 
@@ -1035,7 +1299,7 @@ def build_control_window():
     e3.pack(side=LEFT)
     fb3.pack(side=LEFT)
 
-    l4 = LabelFrame(body, text="Connection Status")
+    l4 = LabelFrame(body, text="Status")
     e4 = Listbox(l4)
     l4.pack(fill=BOTH, expand=1)
     e4.pack(side=LEFT, fill=BOTH, expand=1)
@@ -1053,7 +1317,7 @@ def build_control_window():
 
     menu = Frame(body)
     menu.pack()
-    connections_label = LabelFrame(menu, text="Check Connections")
+    connections_label = LabelFrame(menu, text="Check Handler Connections")
     connections_label.pack(side=LEFT, padx=10, pady=10)
 
     menu.b1 = Button(menu, text="Quit", fg="red", command=exit_program)
@@ -1088,6 +1352,33 @@ def build_control_window():
     menubar.add_cascade(label="Help", menu=helpmenu)
     root.config(menu=menubar)
 
+    # DATABASE TAB
+    database_body = Frame(database_tab)
+    database_body.pack(fill="both", expand=1)
+    file_choose_frame = LabelFrame(database_body, text="Choose file to send to Oracle")
+    file_choose_frame.pack(fill="both")
+    file_select = Entry(file_choose_frame, width=70)
+    file_select.pack(fill="both")
+
+    db_browse_button = Button(
+        file_choose_frame, text="Browse", command=file_to_database_browse
+    )
+    db_browse_button.pack(side=RIGHT)
+
+    db_status_frame = LabelFrame(database_body, text="Status")
+    db_status = Listbox(db_status_frame)
+    db_status_frame.pack(fill=BOTH)
+    db_status.pack(fill=BOTH)
+
+    send_to_database_button = Button(
+        database_body,
+        text="Send file to database",
+        fg="green",
+        command=send_to_database,
+    )
+
+    send_to_database_button.pack()
+
     if check_revision_on_startup == 1:
         check_revision_update(0)
 
@@ -1104,7 +1395,6 @@ root.geometry("400x300")
 
 build_control_window()
 root.mainloop()
-
 # if py3:
 # input("program complete.  Hit 'Enter' to close")
 # else:
