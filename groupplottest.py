@@ -4,6 +4,7 @@ import csv
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from IPython.display import display
 
 cx_Oracle.init_oracle_client(
     lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3"
@@ -34,8 +35,8 @@ colors = [colormap(i) for i in np.linspace(0, 1, len(Unique_ALID))]
 
 
 for i, alid in enumerate(Unique_ALID):
-    print("i:", i)
-    print("alid: ", alid)
+    # print("i:", i)
+    # print("alid: ", alid)
     if not alid:
         print("triggered")
         alid = "Other"
@@ -57,17 +58,19 @@ for i, alid in enumerate(Unique_ALID):
                 statement + "' AND MTX_JAM_STAT_GROUPINGS.GROUPID = '" + str(alid) + "'"
             )
 
-        print("statement: \n", statement)
+        # print("statement: \n", statement)
         cursor.execute(statement)
         result = cursor.fetchall()
-        print("result of statement: \n", result)
+        # print("result of statement: \n", result)
         count = result[0][0]
         Y.append(count)
-    print("Y", Y)
+    # print("Y", Y)
     duration_data.loc[alid] = Y
     ax.bar(Handlers, Y, label=alid, color=colors[i])
-
 print(duration_data)
+duration_data = duration_data.style.highlight_max()
+display(duration_data)
+
 
 plt.title("Count of Alarm Groups")
 plt.ylabel("Count")

@@ -13,7 +13,6 @@ upload_permissions = ["ra2325"]
 user_list = []
 usage = []
 handler_list = [
-    "MTXX",
     "MTX04",
     "MTX06",
     "MTX07",
@@ -26,7 +25,6 @@ handler_list = [
     "MTXA07",
     "MTXA08",
     "MTXA09",
-    "MTXA10",
     "MTXA11",
     "MTXA12",
     "MTXA13",
@@ -57,7 +55,7 @@ outputfilename = "update_cal_values.csv"
 outputdir = "."
 # connect_string = 'gntcaadm/gntcaadm01@ohntweb_12c.am.freescale.net:1521/ohntweb'
 connect_string = (
-     "gntcaadm/gntcaadm01@OHNTWEBDB_VCS.am.freescale.net:1522/OHNTWEB.AM.FREESCALE.NET"
+    "gntcaadm/gntcaadm01@OHNTWEBDB_VCS.am.freescale.net:1522/OHNTWEB.AM.FREESCALE.NET"
 )
 ndn = "mtxx"
 # c4_value = 1
@@ -102,8 +100,8 @@ global_b = 0.087
 # global_b = 0.17
 # global_b = 0.26
 force_time_const = 1
-wu = "fsl\\ultraflexdev"
-wup = "Development1"
+wu = "handler"
+wup = "Password"
 
 optimal_plus_keep_list = {
     "Lot": "lot_id",
@@ -240,6 +238,9 @@ chuck_string_list = [
     "Chuck_Read",
 ]
 
-temp_string_list = ["> ia_tsenseXtdiode_trace.dm.x.x.temp", "> ia_thermXtdiode_temperature.dm.x.x.x_spec_vn"]
+temp_string_list = [
+    "> ia_tsenseXtdiode_trace.dm.x.x.temp",
+    "> ia_thermXtdiode_temperature.dm.x.x.x_spec_vn",
+]
 
 dependent_files = ["STDF_Archive_Editor.py"]
