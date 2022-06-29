@@ -98,7 +98,7 @@ ax.set_xticks(np.arange(min(weeks), max(weeks) + 1, 1.0))
 box = ax.get_position()
 ax.set_position([box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.8])
 ax.legend(
-    loc="upper center", bbox_to_anchor=(0.5, -0.15), fancybox=True, shadow=True, ncol=5
+    loc="upper center", bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=5
 )
 plt.show()
 print(week_count)
