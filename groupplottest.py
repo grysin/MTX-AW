@@ -36,7 +36,7 @@ colors = [colormap(i) for i in np.linspace(0, 1, len(Unique_ALID))]
 
 for i, alid in enumerate(Unique_ALID):
     # print("i:", i)
-    # print("alid: ", alid)
+    print("alid: ", alid)
     if not alid:
         print("triggered")
         alid = "Other"
