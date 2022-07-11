@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from IPython.display import display
+from datetime import date
+from datetime import datetime
 
 cx_Oracle.init_oracle_client(
     lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3"
@@ -23,40 +25,27 @@ sql_query = pd.read_sql_query(statement, conn)
 df = pd.DataFrame(sql_query, columns=["HANDLERNAME", "GROUPID", "COUNT"])
 
 Handlers = df["HANDLERNAME"].sort_values(ascending=True).unique()
-Unique_ALID = df["GROUPID"].sort_values(ascending=True).unique()
+Unique_Group = df["GROUPID"].sort_values(ascending=True).unique()
 
+group_count_data = pd.DataFrame(columns=Handlers)
 
-duration_data = pd.DataFrame(columns=Handlers)
-# fig size = width by hieght
-fig, ax = plt.subplots(figsize=(15, 8.5))
-fig.canvas.set_window_title("MTX Jam Stats")
-colormap = plt.get_cmap("Set3_r")
-colors = [colormap(i) for i in np.linspace(0, 1, len(Unique_ALID))]
+week = date.today().isocalendar()[1]
+six_weeks_back = week - 6
+print(six_weeks_back)
 
-
-for i, alid in enumerate(Unique_ALID):
-    # print("i:", i)
-    print("alid: ", alid)
-    if not alid:
+for i, group in enumerate(Unique_Group):
+    if not group:
         print("triggered")
-        alid = "Other"
+        group = "Other"
     Y = list()
     for handler in Handlers:
-        if alid == "Other":
+        if group == "Other":
             print("Other")
-            statement = (
-                "SELECT NVL(COUNT(MTX_JAM_STAT_DATA.ALID),0) AS COUNT FROM MTX_JAM_STAT_DATA, MTX_JAM_STAT_GROUPINGS WHERE HANDLERNAME = '"
-                + handler
-                + "' AND NOT EXISTS (SELECT null FROM MTX_JAM_STAT_GROUPINGS WHERE MTX_JAM_STAT_DATA.ALID = MTX_JAM_STAT_GROUPINGS.ALID)"
-            )
+            statement = "SELECT NVL(COUNT(MTX_JAM_STAT_DATA.ALID),0) AS COUNT FROM MTX_JAM_STAT_DATA, MTX_JAM_STAT_GROUPINGS WHERE HANDLERNAME = '" + handler + "' AND WEEK = '" + six_weeks_back+ "'NOT EXISTS (SELECT null FROM MTX_JAM_STAT_GROUPINGS WHERE MTX_JAM_STAT_DATA.ALID = MTX_JAM_STAT_GROUPINGS.ALID)"
+            print(statement)
         else:
-            statement = (
-                "SELECT NVL(COUNT(MTX_JAM_STAT_DATA.ALID),0) AS COUNT FROM MTX_JAM_STAT_DATA, MTX_JAM_STAT_GROUPINGS WHERE MTX_JAM_STAT_DATA.ALID = MTX_JAM_STAT_GROUPINGS.ALID AND HANDLERNAME ='"
-                + str(handler)
-            )
-            statement = (
-                statement + "' AND MTX_JAM_STAT_GROUPINGS.GROUPID = '" + str(alid) + "'"
-            )
+            statement = "SELECT NVL(COUNT(MTX_JAM_STAT_DATA.ALID),0) AS COUNT FROM MTX_JAM_STAT_DATA, MTX_JAM_STAT_GROUPINGS WHERE MTX_JAM_STAT_DATA.ALID = MTX_JAM_STAT_GROUPINGS.ALID AND HANDLERNAME ='" + handler + "' AND WEEK > '" + six_weeks_back + "' AND MTX_JAM_STAT_GROUPINGS.GROUPID = '" + group}' "
+            print(statement)
 
         # print("statement: \n", statement)
         cursor.execute(statement)
@@ -65,11 +54,22 @@ for i, alid in enumerate(Unique_ALID):
         count = result[0][0]
         Y.append(count)
     # print("Y", Y)
-    duration_data.loc[alid] = Y
-    ax.bar(Handlers, Y, label=alid, color=colors[i])
-print(duration_data)
-duration_data = duration_data.style.highlight_max()
-display(duration_data)
+    group_count_data.loc[group] = Y
+
+print(group_count_data.sum().sort_values(ascending=False))
+print(group_count_data)
+
+# fig size = width by hieght
+fig, ax = plt.subplots(figsize=(15, 8.5))
+fig.canvas.set_window_title("MTX Jam Stats")
+colormap = plt.get_cmap("Set3_r")
+colors = [colormap(i) for i in np.linspace(0, 1, len(Unique_Group))]
+
+for Y in group_count_data:
+    ax.bar(Handlers, Y, label=group, color=colors[i])
+print(group_count_data)
+duration_data = group_count_data.style.highlight_max()
+display(group_count_data)
 
 
 plt.title("Count of Alarm Groups")

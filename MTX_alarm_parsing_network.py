@@ -35,7 +35,7 @@ cx_Oracle.init_oracle_client(
 )
 
 program_name = "matrix_lot_log_alarm_extractor_shared_folder"
-program_version = "20220426"
+program_version = "20220626"
 program_title = "MTX JAM Stat Analysis"
 root = Tk()
 root.title(program_title + " - " + program_version)
@@ -548,7 +548,6 @@ def outfile_header_row_Lot_History(outf):
 
 def Read_matrix_alarm_text_lookup():
     global Alarm_text
-
     Alarm_text = {}
     lookup = open("Matrix_alarm_text_lookup.csv", "r")
     for line in lookup:
@@ -1213,11 +1212,13 @@ def send_to_database():
             try:
                 cursor.execute(sql_insert)
             except cx_Oracle.IntegrityError:
-                duplicate_count = duplicate_count+1
-                #print("Duplicate")
+                duplicate_count = duplicate_count + 1
+                # print("Duplicate")
                 pass
         conn.commit()
-        duplicate_statement = str(duplicate_count) + " of " + num_csv_rows + " were duplicates"
+        duplicate_statement = (
+            str(duplicate_count) + " of " + num_csv_rows + " were duplicates"
+        )
         db_status.insert(0, duplicate_statement)
         db_status.insert(0, "Task Complete")
         db_status.update()
