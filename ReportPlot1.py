@@ -1,6 +1,7 @@
 # Report plot 1
 # Past 6 weeks, get pareto of alarms
 
+from hashlib import new
 import cx_Oracle
 import os
 import csv
@@ -78,8 +79,8 @@ for i, row in df.iterrows():
 print("No Group ALIDs: \n", no_group_alids)
 
 no_desc_alid = list()
-fig, ax = plt.subplots(figsize=(15, 8.5))
-fig.canvas.set_window_title("MTX Jam Stats")
+fig, ax = plt.subplots(figsize=(10, 6))
+fig.canvas.set_window_title("MTX Jam Stat Plot")
 colormap = plt.get_cmap("tab20")
 colors = [colormap(i) for i in np.linspace(0, 1, len(Unique_Group))]
 
@@ -110,23 +111,59 @@ for i, group in enumerate(Unique_Group):
 
 # re order plot
 new_handler_order = group_count_data.sum().sort_values(ascending=False)
+new_handler_order_counts = list(new_handler_order)
 new_handler_order = list(new_handler_order.keys())
+plot_x_labels = list()
+table_x_labels = list()
 
+for index, value in enumerate(new_handler_order):
+    plot_x_label = value.strip("MTX") + "\n" + str(new_handler_order_counts[index])
+    plot_x_labels.append(plot_x_label)
+    table_x_label = value.strip("MTX")
+    table_x_labels.append(table_x_label)
+
+
+# print(group_count_data)
 reordered_data = group_count_data[new_handler_order]
+# print(reordered_data)
 
 for index, group in enumerate(Unique_Group):
+    # print("index:", index)
+    # print("group:", group)
     if group is None:
         continue
-    Y = reordered_data.loc[group]
-    ax.bar(x=new_handler_order, height=Y, label=group, color=colors[index])
+    Y = list(reordered_data.loc[group])
+    # print("Y:", Y)
+    if index == 0:
+        ax.bar(plot_x_labels, Y, label=group, color=colors[index])
+        Old_Y = Y
+    else:
+        # print("Old Y:", Old_Y)
+        ax.bar(plot_x_labels, Y, label=group, color=colors[index], bottom=Old_Y)
+        Old_Y = [x + y for x, y in zip(Old_Y, Y)]
+
 
 print("No Desc ALIDs: \n", no_desc_alid, "\n")
 print(reordered_data, "\n")
+ax.tick_params(axis="x", labelsize=8)
 plt.title("Past 6 Week Summary")
 plt.ylabel("Count")
-box = ax.get_position()
-ax.set_position([box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.9])
-ax.legend(
-    loc="upper center", bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=4
+plt.rcParams.update({"font.sans-serif": "Garamond"})
+ax.legend(fancybox=True, shadow=True, ncol=4)
+
+# figsize is width by height
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+# hides plot lines
+fig2.patch.set_visible(False)
+ax2.axis("off")
+ax2.axis("tight")
+fig2.canvas.set_window_title("MTX Jam Stat Table")
+table = ax2.table(
+    cellText=reordered_data.values,
+    colLabels=table_x_labels,
+    rowLabels=reordered_data.index,
+    loc="center",
 )
+table.auto_set_font_size(False)
+table.set_fontsize(10)
 plt.show()
