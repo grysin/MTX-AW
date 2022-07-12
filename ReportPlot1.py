@@ -1,17 +1,16 @@
 # Report plot 1
 # Past 6 weeks, get pareto of alarms
 
-from hashlib import new
 import cx_Oracle
 import os
 import csv
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from IPython.display import display
 import handler_kit_Tsense_calibrate_config as config
 from datetime import date
 from datetime import datetime
+from fpdf import FPDF
 
 cx_Oracle.init_oracle_client(
     lib_dir=r"C:\Program Files (x86)\Oracle\instantclient_21_3"
@@ -150,20 +149,40 @@ plt.title("Past 6 Week Summary")
 plt.ylabel("Count")
 plt.rcParams.update({"font.sans-serif": "Garamond"})
 ax.legend(fancybox=True, shadow=True, ncol=4)
+plt.savefig("Plot1.png", format="png", bbox_inches="tight", dpi=1200)
+
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+fig2.canvas.set_window_title("MTX Jam Stat Plot")
+colormap2 = plt.get_cmap("tab20")
+colors2 = [colormap2(i) for i in np.linspace(0, 1, len(Unique_Group))]
+
 
 # figsize is width by height
-fig2, ax2 = plt.subplots(figsize=(10, 6))
+fig3, ax3 = plt.subplots(figsize=(10, 6))
 # hides plot lines
-fig2.patch.set_visible(False)
-ax2.axis("off")
-ax2.axis("tight")
-fig2.canvas.set_window_title("MTX Jam Stat Table")
-table = ax2.table(
+fig3.patch.set_visible(False)
+ax3.axis("off")
+ax3.axis("tight")
+fig3.canvas.set_window_title("MTX Jam Stat Table")
+table = ax3.table(
     cellText=reordered_data.values,
     colLabels=table_x_labels,
     rowLabels=reordered_data.index,
     loc="center",
+    cellLoc="center",
 )
 table.auto_set_font_size(False)
-table.set_fontsize(10)
-plt.show()
+table.set_fontsize(8)
+plt.savefig("Table1.png", format="png", bbox_inches="tight", dpi=1200)
+
+
+pdf = FPDF()
+pdf_width = 210
+pdf_height = 297
+pdf.add_font("Garamond", "", r"C:\Windows\Fonts\GARA.TTF", uni=True)
+pdf.add_page()
+pdf.set_font("Garamond", style="", size=12)
+pdf.image(name="Plot1.png", x=10, y=20, w=190, h=120, type="png")
+pdf.image(name="Table1.png", x=10, y=100, w=190, h=130, type="png")
+
+pdf.output("test.pdf", "F")
