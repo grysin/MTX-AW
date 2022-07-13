@@ -702,3 +702,10 @@ ALARM14390,Left Output Shuttle Door unable to open.
 ALARM14391,Right Output Shuttle Door unable to open.
 ALARM14392,Left Output Shuttle Door unable to close.
 ALARM14393,Right Output Shuttle Door unable to close.
+ALARM14509,High Voltage not present OR within valid range.
+ALARM14515,Maximum Heater temperature exceeded.
+ALARM14519,Broken TH RTD detected.
+ALARM14520,Broken TS RTD detected
+ALARM14532,The ATC board heater temperature is less than the heat sink temperature.
+ALARM14554,High Voltage is off or out of range
+ALARM14555,Unknown ATC alarm.
