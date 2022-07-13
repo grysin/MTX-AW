@@ -144,45 +144,55 @@ for index, group in enumerate(Unique_Group):
 
 print("No Desc ALIDs: \n", no_desc_alid, "\n")
 print(reordered_data, "\n")
-ax.tick_params(axis="x", labelsize=8)
-plt.title("Past 6 Week Summary")
-plt.ylabel("Count")
-plt.rcParams.update({"font.sans-serif": "Garamond"})
-ax.legend(fancybox=True, shadow=True, ncol=4)
-plt.savefig("Plot1.png", format="png", bbox_inches="tight", dpi=1200)
+# ax.tick_params(axis="x", labelsize=8)
+# plt.title("Past 6 Week Summary")
+# plt.ylabel("Count")
+# plt.rcParams.update({"font.sans-serif": "Garamond"})
+# ax.legend(fancybox=True, shadow=True, ncol=4)
+# plt.savefig("Plot1.png", format="png", bbox_inches="tight", dpi=1200)
 
-fig2, ax2 = plt.subplots(figsize=(10, 6))
-fig2.canvas.set_window_title("MTX Jam Stat Plot")
-colormap2 = plt.get_cmap("tab20")
-colors2 = [colormap2(i) for i in np.linspace(0, 1, len(Unique_Group))]
+# fig2, ax2 = plt.subplots(figsize=(10, 6))
+# fig2.canvas.set_window_title("MTX Jam Stat Plot")
+# colormap2 = plt.get_cmap("tab20")
+# colors2 = [colormap2(i) for i in np.linspace(0, 1, len(Unique_Group))]
+plot2_database = group_count_data.T
+
+new_plot2_order = plot2_database.sum().sort_values(ascending=False)
+print(new_plot2_order)
+new_plot2_order_counts = list(new_plot2_order)
+new_plot2_order = list(new_plot2_order.keys())
+plot2_x_labels = list()
+for index, value in enumerate(new_plot2_order):
+    plot2_x_label = value + "\n" + str(new_handler_order_counts[index])
+    plot_x_labels.append(plot2_x_label)
 
 
 # figsize is width by height
-fig3, ax3 = plt.subplots(figsize=(10, 6))
+# fig3, ax3 = plt.subplots(figsize=(10, 6))
 # hides plot lines
-fig3.patch.set_visible(False)
-ax3.axis("off")
-ax3.axis("tight")
-fig3.canvas.set_window_title("MTX Jam Stat Table")
-table = ax3.table(
-    cellText=reordered_data.values,
-    colLabels=table_x_labels,
-    rowLabels=reordered_data.index,
-    loc="center",
-    cellLoc="center",
-)
-table.auto_set_font_size(False)
-table.set_fontsize(8)
-plt.savefig("Table1.png", format="png", bbox_inches="tight", dpi=1200)
+# fig3.patch.set_visible(False)
+# ax3.axis("off")
+# ax3.axis("tight")
+# fig3.canvas.set_window_title("MTX Jam Stat Table")
+# table = ax3.table(
+#     cellText=reordered_data.values,
+#     colLabels=table_x_labels,
+#     rowLabels=reordered_data.index,
+#     loc="center",
+#     cellLoc="center",
+# )
+# table.auto_set_font_size(False)
+# table.set_fontsize(8)
+# plt.savefig("Table1.png", format="png", bbox_inches="tight", dpi=1200)
 
 
-pdf = FPDF()
-pdf_width = 210
-pdf_height = 297
-pdf.add_font("Garamond", "", r"C:\Windows\Fonts\GARA.TTF", uni=True)
-pdf.add_page()
-pdf.set_font("Garamond", style="", size=12)
-pdf.image(name="Plot1.png", x=10, y=20, w=190, h=120, type="png")
-pdf.image(name="Table1.png", x=10, y=100, w=190, h=130, type="png")
+# pdf = FPDF()
+# pdf_width = 210
+# pdf_height = 297
+# pdf.add_font("Garamond", "", r"C:\Windows\Fonts\GARA.TTF", uni=True)
+# pdf.add_page()
+# pdf.set_font("Garamond", style="", size=12)
+# pdf.image(name="Plot1.png", x=10, y=20, w=190, h=120, type="png")
+# pdf.image(name="Table1.png", x=10, y=100, w=190, h=130, type="png")
 
-pdf.output("test.pdf", "F")
+# pdf.output("test.pdf", "F")
