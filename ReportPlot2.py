@@ -60,10 +60,17 @@ except AttributeError:
     ]
 
 week_count = pd.DataFrame(columns=weeks)
-fig, ax = plt.subplots(figsize=(10, 6))
+# figsize is width by height
+
+num_handlers = len(Handlers)
+half_point_handlers = round(num_handlers / 2)
+
+
+fig, (ax, ax2) = plt.subplots(figsize=(10, 6), ncols=1, nrows=2, sharex=True)
 fig.canvas.manager.set_window_title("MTX Jam Stats Plot 3")
 colormap = plt.get_cmap("hsv")
 colors = [colormap(i) for i in np.linspace(0, 1, len(Handlers))]
+half_colors = [colormap(i) for i in np.linspace(0, 1, half_point_handlers)]
 
 for index, handler in enumerate(Handlers):
     Y = list()
@@ -78,15 +85,17 @@ for index, handler in enumerate(Handlers):
             count = 0
         Y.append(count)
     week_count.loc[handler] = Y
-    ax.plot(weeks, Y, label=handler, color=colors[index])
-
-plt.title("Past 6 Week Summary \n Each Week Sum")
+    if (index + 1) <= half_point_handlers:
+        ax.plot(weeks, Y, label=handler, color=half_colors[index])
+    else:
+        ax2.plot(
+            weeks, Y, label=handler, color=half_colors[index - half_point_handlers]
+        )
+plt.rcParams.update({"font.sans-serif": "Garamond"})
+plt.suptitle("Past 6 Week Summary \n Each Week Sum")
 plt.ylabel("Count")
 plt.xlabel("Work Week")
 ax.set_xticks(np.arange(min(weeks), max(weeks) + 1, 1.0))
-box = ax.get_position()
-ax.set_position([box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.8])
-ax.legend(
-    loc="upper center", bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=5
-)
+ax.legend()
+ax2.legend()
 plt.show()
