@@ -551,8 +551,8 @@ def Read_matrix_alarm_text_lookup():
     Alarm_text = {}
     lookup = open("Matrix_alarm_text_lookup.csv", "r")
     for line in lookup:
-        # (Alarm,text) = line.strip().split(",")
-        (Alarm, text) = parse_line_csv(line.strip())
+        # Alarm, text = line.strip().split(",")
+        Alarm, text = parse_line_csv(line.strip())
         Alarm_text[Alarm] = text
     lookup.close()
     return
@@ -940,6 +940,7 @@ def all_handlers():
         copy_files()
     outf.close()
     e4.insert(0, "task complete")
+
     return
 
 

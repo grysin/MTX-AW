@@ -82,7 +82,7 @@ for i, row in df.iterrows():
     if not group:
         no_group_explain = handler + ":" + str(alid) + ", " + str(count)
         no_group_alids.append(no_group_explain)
-print("No Group ALIDs: \n", no_group_alids)
+print("No Group ALIDs (Group is null): \n", no_group_alids)
 no_desc_alid = list()
 
 # SETTING UP FIGURE 1
@@ -114,14 +114,19 @@ for i, group in enumerate(Unique_Group):
         Y.append(count)
     group_count_data.loc[group] = Y
 
-pd.options.plotting.backend = "plotly"
-fig = group_count_data.T.plot.bar()
-fig.update_xaxes(categoryorder="total descending")
-# fig.show()
+print("No Desc ALIDs (Group is NO_DESC): \n", no_desc_alid)
 
-fig2 = group_count_data.plot.bar()
+pd.options.plotting.backend = "plotly"
+fig = group_count_data.T.plot.bar(
+    title="Past 6 Week Alarm Summary: Handler Focus",
+)
+fig.update_xaxes(categoryorder="total descending")
+fig.show()
+
+
+fig2 = group_count_data.plot.bar(title="Past 6 Week Alarm Summary: Alarm Group Focus")
 fig2.update_xaxes(categoryorder="total descending")
-# fig2.show()
+fig2.show()
 
 fig3 = go.Figure(
     data=[
@@ -135,4 +140,69 @@ fig3 = go.Figure(
         )
     ]
 )
-fig3.show()
+# fig3.show()
+
+# WEEK COUNT
+
+current_week = date.today().isocalendar()[1]
+six_weeks_back = current_week - 6
+weeks = list(np.arange(start=six_weeks_back, stop=current_week + 1, step=1))
+
+statement2 = "SELECT MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_DATA.WEEK, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT FROM MTX_JAM_STAT_DATA WHERE WEEK >= "
+statement2 = statement2 + str(six_weeks_back)
+statement2 = statement2 + " AND WEEK <= "
+statement2 = statement2 + str(current_week)
+statement2 = statement2 + " GROUP BY HANDLERNAME, WEEK ORDER BY HANDLERNAME DESC"
+
+sql_query2 = pd.read_sql_query(statement2, conn)
+df2 = pd.DataFrame(sql_query2, columns=["HANDLERNAME", "WEEK", "COUNT"])
+
+handler_week_count = pd.DataFrame(columns=weeks)
+
+for index, handler in enumerate(Handlers):
+    Y = list()
+    for week in weeks:
+        handler_match = df2["HANDLERNAME"] == handler
+        week_match = df2["WEEK"] == week
+        count = df2["COUNT"][handler_match & week_match]
+        count = list(count)
+        try:
+            count = count[0]
+        except IndexError:
+            count = 0
+        Y.append(count)
+    handler_week_count.loc[handler] = Y
+
+fig4 = handler_week_count.T.plot(title="Number of Alarms on Each Handler Past 6 Weeks")
+fig4.show()
+
+statement3 = "SELECT MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_GROUPINGS.GROUPID, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_GROUPINGS ON MTX_JAM_STAT_GROUPINGS.ALID = MTX_JAM_STAT_DATA.ALID WHERE MTX_JAM_STAT_DATA.WEEK >= "
+statement3 = statement3 + str(six_weeks_back)
+statement3 = statement3 + " AND MTX_JAM_STAT_DATA.WEEK <= "
+statement3 = statement3 + str(current_week)
+statement3 = (
+    statement3
+    + "GROUP BY MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_GROUPINGS.GROUPID"
+)
+
+sql_query3 = pd.read_sql_query(statement3, conn)
+df3 = pd.DataFrame(
+    sql_query3, columns=["ALID", "WEEK", "HANDLERNAME", "GROUPID", "COUNT"]
+)
+
+alarmgroup_week_count = pd.DataFrame(columns=weeks)
+
+for index, group in enumerate(Unique_Group):
+    Y = list()
+    for week in weeks:
+        handler_match = df3["GROUPID"] == group
+        week_match = df3["WEEK"] == week
+        count = df3["COUNT"][handler_match & week_match]
+        sumation = count.sum()
+        Y.append(sumation)
+    alarmgroup_week_count.loc[group] = Y
+
+fig5 = alarmgroup_week_count.T.plot(
+    title="Number of Alarms for each Alarm Group Past 6 Weeks"
+)
+fig5.show()

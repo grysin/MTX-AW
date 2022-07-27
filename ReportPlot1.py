@@ -216,15 +216,15 @@ table.auto_set_font_size(False)
 table.set_fontsize(10)
 plt.savefig("Table1.png", format="png", bbox_inches="tight", dpi=400)
 
-plt.show()
-# pdf = FPDF()
-# pdf_width = 210
-# pdf_height = 297
-# pdf.add_font("Garamond", "", r"C:\Windows\Fonts\GARA.TTF", uni=True)
-# pdf.add_page()
-# pdf.set_font("Garamond", style="", size=12)
-# pdf.image(name="Plot1.png", x=10, y=10, w=170, h=110, type="png")
-# pdf.image(name="Plot2.png", x=10, y=120, w=170, h=110, type="png")
-# pdf.image(name="Table1.png", x=10, y=210, w=170, h=110, type="png")
-# pdf.output("test.pdf", "F")
-# print("Completed")
+# plt.show()
+pdf = FPDF()
+pdf_width = 210
+pdf_height = 297
+pdf.add_font("Garamond", "", r"C:\Windows\Fonts\GARA.TTF", uni=True)
+pdf.add_page()
+pdf.set_font("Garamond", style="", size=12)
+pdf.image(name="Plot1.png", x=10, y=10, w=170, h=110, type="png")
+pdf.image(name="Plot2.png", x=10, y=120, w=170, h=110, type="png")
+pdf.image(name="Table1.png", x=10, y=210, w=170, h=110, type="png")
+pdf.output("test.pdf", "F")
+print("Completed")
