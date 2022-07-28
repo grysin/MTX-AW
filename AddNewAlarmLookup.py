@@ -27,8 +27,23 @@ with open(file) as csv_file:
     header = csv_rows[0]
     # the rest is actual data
     data = csv_rows[1:]
-    for row in csv_rows:
+    for index, row in enumerate(data):
         alid = row[0]
         alarmtext = row[1]
         subgroupid = row[2]
         groupid = row[3]
+
+        sql_insert = "INSERT INTO MTX_JAM_STAT_ALARMINFO(ALID, ALARMTEXT, SUBGROUPID, GROUPID) VALUES('"
+        sql_insert = sql_insert + alid + "',"
+        sql_insert = sql_insert + " q'[" + alarmtext + "]','"
+        sql_insert = sql_insert + subgroupid + "','"
+        sql_insert = sql_insert + groupid + "')"
+        print(index)
+        print(sql_insert)
+        try:
+            cursor.execute(sql_insert)
+        except cx_Oracle.IntegrityError:
+            pass
+
+    conn.commit()
+    print("completed")
