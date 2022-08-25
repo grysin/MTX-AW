@@ -17,6 +17,7 @@ from datetime import datetime
 from fpdf import FPDF
 import dash
 from dash import dcc
+from dash import html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
@@ -53,95 +54,116 @@ connect_string = (
 conn = cx_Oracle.connect(connect_string)
 cursor = conn.cursor()
 
+current_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 current_week = date.today().isocalendar()[1]
+current_year = date.today().isocalendar()[0]
+pd.options.plotting.backend = "plotly"
 
 selected_duration = 6
 start_week = current_week - selected_duration
 weeks = list(np.arange(start=start_week, stop=current_week + 1, step=1))
 
 
-statement = "SELECT MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_GROUPINGS.GROUPID, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_GROUPINGS ON MTX_JAM_STAT_GROUPINGS.ALID = MTX_JAM_STAT_DATA.ALID WHERE MTX_JAM_STAT_DATA.WEEK > "
-statement = statement + str(start_week)
-statement = (
-    statement
-    + " GROUP BY MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.HANDLERNAME,MTX_JAM_STAT_GROUPINGS.GROUPID ORDER BY COUNT DESC"
-)
+def initial_df():
+    global group_count_data
+    global Unique_Group
 
-sql_query = pd.read_sql_query(statement, conn)
-df = pd.DataFrame(sql_query, columns=["ALID", "HANDLERNAME", "GROUPID", "COUNT"])
+    statement = "SELECT MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_ALARMINFO.GROUPID, NVL(MTX_JAM_STAT_ALARMINFO.SUBGROUPID, 'NO_SUB_GROUP') AS SUBGROUPID, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_ALARMINFO ON MTX_JAM_STAT_ALARMINFO.ALID = MTX_JAM_STAT_DATA.ALID WHERE MTX_JAM_STAT_DATA.WEEK >= "
+    statement = statement + str(start_week)
+    statement = statement + "AND YEAR = " + str(current_year)
+    statement = (
+        statement
+        + " GROUP BY MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.HANDLERNAME,MTX_JAM_STAT_ALARMINFO.GROUPID, MTX_JAM_STAT_ALARMINFO.SUBGROUPID ORDER BY COUNT DESC"
+    )
 
-Unique_Group = df["GROUPID"].sort_values(ascending=True).unique()
+    sql_query = pd.read_sql_query(statement, conn)
+    df = pd.DataFrame(
+        sql_query, columns=["ALID", "HANDLERNAME", "GROUPID", "SUBGROUPID", "COUNT"]
+    )
 
-# Dataframe that plot will be generated from
-no_group_alids = list()
-for i, row in df.iterrows():
-    alid = row[0]
-    handler = row[1]
-    group = row[2]
-    count = row[3]
-    if not group:
-        no_group_explain = handler + ":" + str(alid) + ", " + str(count)
-        no_group_alids.append(no_group_explain)
-print("No Group ALIDs (Group is null): \n", no_group_alids)
-no_desc_alid = list()
+    print("df", df)
 
+    Unique_Group = df["GROUPID"].sort_values(ascending=True).unique()
+    print(Unique_Group)
 
-group_count_data = pd.DataFrame(columns=Handlers)
+    # Dataframe that plot will be generated from
+    no_group_alids = list()
+    for i, row in df.iterrows():
+        alid = row[0]
+        handler = row[1]
+        group = row[2]
+        sub_group = row[3]
+        count = row[4]
+        if not group:
+            no_group_explain = handler + ":" + str(alid) + ", " + str(count)
+            no_group_alids.append(no_group_explain)
+    # print("No Group ALIDs (Group is null): \n", no_group_alids)
+    no_desc_alid = list()
 
-# SETTING UP FIGURE 1
-for i, group in enumerate(Unique_Group):
-    if group is None:
-        continue
-    Y = list()
-    for handler in Handlers:
-        is_group = df["GROUPID"] == group
-        is_handler = df["HANDLERNAME"] == handler
-        sorted_df = df[is_group & is_handler]
-        if group == "NO_DESC":
+    group_count_data = pd.DataFrame(columns=Handlers)
+
+    # SETTING UP FIGURE 1
+    for i, group in enumerate(Unique_Group):
+        if group is None:
+            continue
+        Y = list()
+        for handler in Handlers:
+            is_group = df["GROUPID"] == group
+            is_handler = df["HANDLERNAME"] == handler
+            sorted_df = df[is_group & is_handler]
+            if group == "NO_DESC":
+                if sorted_df.empty:
+                    pass
+                else:
+                    for index, row in sorted_df.iterrows():
+                        alid = row["ALID"]
+                        count = row["COUNT"]
+                        no_desc_explain = handler + ":" + str(alid) + ", " + str(count)
+                        no_desc_alid.append(no_desc_explain)
+
             if sorted_df.empty:
-                pass
+                count = 0
             else:
-                for index, row in sorted_df.iterrows():
-                    alid = row["ALID"]
-                    count = row["COUNT"]
-                    no_desc_explain = handler + ":" + str(alid) + ", " + str(count)
-                    no_desc_alid.append(no_desc_explain)
+                count = sorted_df["COUNT"].sum()
+            Y.append(count)
+        group_count_data.loc[group] = Y
 
-        if sorted_df.empty:
-            count = 0
-        else:
-            count = sorted_df["COUNT"].sum()
-        Y.append(count)
-    group_count_data.loc[group] = Y
+    # print(group_count_data)
+    return
 
-print("No Desc ALIDs (Group is NO_DESC): \n", no_desc_alid)
-pd.options.plotting.backend = "plotly"
+
+initial_df()
+
+
+# print("No Desc ALIDs (Group is NO_DESC): \n", no_desc_alid)
 
 
 def Plot1():
-
-    fig = group_count_data.T.plot.bar(
+    global fig1
+    initial_df()
+    fig1 = group_count_data.T.plot.bar(
         labels={"value": "Count", "index": "Handler"},
-        title="Past 6 Week Alarm Summary: Handler Focus",
+        title=f"Past {selected_duration} Week Alarm Summary: Handler Focus",
     )
-    fig.update_xaxes(categoryorder="total descending")
-    fig.update_layout(legend_title_text="Alarm Type")
-    fig.show()
+    fig1.update_xaxes(categoryorder="total descending")
+    fig1.update_layout(legend_title_text="Alarm Type")
     return
 
 
 def Plot2():
+    global fig2
+    initial_df()
     fig2 = group_count_data.plot.bar(
         labels={"value": "Count", "index": "Alarm Type"},
-        title="Past 6 Week Alarm Summary: Alarm Group Focus",
+        title=f"Past {selected_duration} Week Alarm Summary: Alarm Group Focus",
     )
     fig2.update_xaxes(categoryorder="total descending")
     fig2.update_layout(legend_title_text="Handler")
-    fig2.show()
     return
 
 
 def Plot3():
+    global fig3
     fig3 = go.Figure(
         data=[
             go.Table(
@@ -154,12 +176,12 @@ def Plot3():
             )
         ]
     )
-    fig3.show()
     return
 
 
 # WEEK COUNT
 def Plot4():
+    global fig4
     statement2 = "SELECT MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_DATA.WEEK, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT FROM MTX_JAM_STAT_DATA WHERE WEEK >= "
     statement2 = statement2 + str(start_week)
     statement2 = statement2 + " AND WEEK <= "
@@ -187,14 +209,14 @@ def Plot4():
 
     fig4 = handler_week_count.T.plot(
         labels={"value": "Count", "index": "Work Week"},
-        title="Number of Alarms on Each Handler Past 6 Weeks",
+        title=f"Number of Alarms on Each Handler Past {selected_duration} Weeks",
     )
     fig4.update_layout(legend_title_text="Handler")
-    fig4.show()
     return
 
 
 def Plot5():
+    global fig5
     statement3 = "SELECT MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_GROUPINGS.GROUPID, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_GROUPINGS ON MTX_JAM_STAT_GROUPINGS.ALID = MTX_JAM_STAT_DATA.ALID WHERE MTX_JAM_STAT_DATA.WEEK >= "
     statement3 = statement3 + str(start_week)
     statement3 = statement3 + " AND MTX_JAM_STAT_DATA.WEEK <= "
@@ -225,8 +247,48 @@ def Plot5():
 
     fig5 = alarmgroup_week_count.T.plot(
         labels={"value": "Count", "index": "Work Week"},
-        title="Number of Alarms for each Alarm Group Past 6 Weeks",
+        title=f"Number of Alarms for each Alarm Group Past {selected_duration} Weeks",
     )
     fig5.update_layout(legend_title_text="Alarm Type")
-    fig5.show()
     return
+
+
+Plot1()
+Plot2()
+Plot4()
+Plot5()
+
+# Dash app layout
+app = dash.Dash(__name__)
+
+app.layout = html.Div(
+    [
+        dcc.Tab([], label="Handler Pareto", value="tab-1"),
+        dcc.Tab([], label="Alarm Pareto", value="tab-2"),
+        dcc.Tab([], label="Handler Work Week", value="tab-3"),
+        dcc.Tab([], label="Alarm Work Week", value="tab-4"),
+        dcc.Tab([], label="Raw Data", value="tab-5"),
+    ],
+)
+
+
+@app.callback(
+    # Output("graph1", "fig1"),
+    # Output("graph2", "fig2"),
+    # Output("graph3", "fig3"),
+    # Output("graph4", "fig4"),
+    Output("tabs-content", "children"),
+    Input("tabs", "value"),
+    # Input("graph1", "click_data1"),
+    # Input("graph2", "click_data2"),
+    # Input("graph3", "click_data3"),
+    # Input("graph4", "click_data4"),
+)
+def DrillDown1(click_data1):
+    ctx = dash.callback_context
+    print(ctx)
+    trigger_id = ctx.triggered[0]
+    print(trigger_id)
+
+
+app.run_server(debug=True)

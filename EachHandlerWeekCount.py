@@ -71,6 +71,7 @@ fig.canvas.set_window_title("MTX Jam Stats")
 colormap = plt.get_cmap("hsv")
 colors = [colormap(i) for i in np.linspace(0, 1, len(handler_list))]
 
+
 for i, handler in enumerate(handler_list):
     Y = []
     for week in weeks:
@@ -100,5 +101,5 @@ ax.set_position([box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.8]
 ax.legend(
     loc="upper center", bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=5
 )
-plt.show()
+# plt.show()
 print(week_count)
