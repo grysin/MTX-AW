@@ -29,6 +29,7 @@ with open(file) as csv_file:
     data = csv_rows[1:]
     for index, row in enumerate(data):
         alid = row[0]
+        alid = alid.strip("ALARM")
         alarmtext = row[1]
         subgroupid = row[2]
         groupid = row[3]

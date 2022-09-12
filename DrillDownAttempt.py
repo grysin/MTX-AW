@@ -62,7 +62,7 @@ current_week = date.today().isocalendar()[1]
 current_year = date.today().isocalendar()[0]
 pd.options.plotting.backend = "plotly"
 
-selected_duration = 6
+selected_duration = 2
 start_week = current_week - selected_duration
 weeks = list(np.arange(start=start_week, stop=current_week + 1, step=1))
 
