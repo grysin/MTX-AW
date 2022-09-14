@@ -80,6 +80,7 @@ def set_time_decode(time):
 # the initial time (6 weeks back) in set time format
 sql_init_endtime = set_time_convert(init_endtime)
 sql_init_starttime = set_time_convert(init_starttime)
+print(sql_init_starttime, sql_init_endtime)
 start_date = str(init_starttime.date())
 end_date = str(init_endtime.date())
 
@@ -180,6 +181,8 @@ def Plot2():
     global sql_init_endtime
     global sql_init_starttime
     initial_df()
+    start_date = set_time_decode(sql_init_starttime)
+    end_date = set_time_decode(sql_init_endtime)
     fig2 = group_count_data.plot.bar(
         labels={"value": "Count", "index": "Alarm Type"},
         title=f"Alarm Pareto {start_date} to {end_date}",
@@ -204,6 +207,7 @@ def Plot3():
     sql_query3 = pd.read_sql_query(statement3, conn)
     df3 = pd.DataFrame(sql_query3, columns=["HANDLERNAME", "WEEK", "COUNT"])
     weeks = df3["WEEK"].sort_values(ascending=True).unique()
+    num_weeks = int(max(weeks) - min(weeks)) + 2
     handler_week_count = pd.DataFrame(columns=weeks)
     selected_duration = max(weeks) - min(weeks)
 
@@ -220,12 +224,14 @@ def Plot3():
                 count = 0
             Y.append(count)
         handler_week_count.loc[handler] = Y
-
+    start_date = set_time_decode(sql_init_starttime)
+    end_date = set_time_decode(sql_init_endtime)
     fig3 = handler_week_count.T.plot(
         labels={"value": "Count", "index": "Work Week"},
         title=f"Handler Trend {start_date} to {end_date}",
     )
     fig3.update_layout(legend_title_text="Handler")
+    fig3.update_xaxes(nticks=num_weeks)
     return fig3
 
 
@@ -248,6 +254,7 @@ def Plot4():
         sql_query4, columns=["ALID", "WEEK", "HANDLERNAME", "GROUPID", "COUNT"]
     )
     weeks = df4["WEEK"].sort_values(ascending=True).unique()
+    num_weeks = int(max(weeks) - min(weeks)) + 2
     alarmgroup_week_count = pd.DataFrame(columns=weeks)
 
     for index, group in enumerate(Unique_Group):
@@ -261,12 +268,14 @@ def Plot4():
             sumation = count.sum()
             Y.append(sumation)
         alarmgroup_week_count.loc[group] = Y
-
+    start_date = set_time_decode(sql_init_starttime)
+    end_date = set_time_decode(sql_init_endtime)
     fig4 = alarmgroup_week_count.T.plot(
         labels={"value": "Count", "index": "Work Week"},
         title=f"Alarm Trend {start_date} to {end_date}",
     )
     fig4.update_layout(legend_title_text="Alarm Type")
+    fig4.update_xaxes(nticks=num_weeks)
     return fig4
 
 
@@ -291,6 +300,15 @@ app.layout = html.Div(
             id="dropdown",
         ),
         dcc.Graph(id="Plot", figure={}),
+        dbc.Button(
+            "🡠",
+            id="back-button",
+            outline=True,
+            size="sm",
+            className="mt-2 ml-2 col-1",
+            style={"display": "none"},
+        ),
+        dcc.Graph(id="Plot2", figure={}, style={"display": "none"}),
         html.Button("Download Graph Content", id="download_button"),
         dcc.Download(id="download_content"),
     ]
@@ -341,6 +359,126 @@ def date_update(dropdown_value, date_start, date_end):
         return Plot3()
     if dropdown_value == "Alarm Trend":
         return Plot4()
+
+
+@app.callback(
+    Output("Plot2", "figure"),
+    Output("Plot2", "style"),
+    Output("back-button", "style"),
+    # to hide/unhide the back button
+    [
+        Input("Plot", "clickData"),  # for getting the vendor name from graph
+        Input("back-button", "n_clicks"),
+        Input("dropdown", "value"),
+    ],
+)
+def drilldown(click_data, n_clicks, dropdown_value):
+    global start_date
+    global end_date
+    ctx = dash.callback_context
+    trigger_id = ctx.triggered[0]["prop_id"].split(".")[0]
+    if trigger_id == "Plot":
+        if click_data is not None:
+            if dropdown_value == "Handler Pareto":
+                handler = click_data["points"][0]["label"]
+                group_number = click_data["points"][0]["curveNumber"]
+                group = Unique_Group[group_number]
+                drill_down_data = df[
+                    (df.HANDLERNAME == handler) & (df.GROUPID == group)
+                ]
+                drill_down_data["ALID"] = drill_down_data["ALID"].astype(str)
+                fig = px.bar(
+                    drill_down_data,
+                    x="ALID",
+                    y="COUNT",
+                    color="ALID",
+                    custom_data=["ALID", "COUNT", "ALARMTEXT"],
+                )
+                fig.update_layout(title=f"{handler} {group} Specific Issues")
+                fig.update_xaxes(
+                    categoryorder="total descending",
+                    ticks="outside",
+                    tickson="boundaries",
+                )
+                fig.update_traces(
+                    hovertemplate="<br>".join(
+                        ["COUNT: %{y}", "ALARMTEXT: %{customdata[2]}"]
+                    )
+                )
+                return fig, {"display": "block"}, {"display": "block"}
+
+            if dropdown_value == "Alarm Pareto":
+                group = click_data["points"][0]["label"]
+                handler_number = click_data["points"][0]["curveNumber"]
+                handler = Handlers[handler_number]
+                drill_down_data = df[
+                    (df.HANDLERNAME == handler) & (df.GROUPID == group)
+                ]
+                drill_down_data["ALID"] = drill_down_data["ALID"].astype(str)
+                print(drill_down_data)
+                fig = px.bar(
+                    drill_down_data,
+                    x="ALID",
+                    y="COUNT",
+                    color="ALID",
+                    custom_data=["ALID", "COUNT", "ALARMTEXT"],
+                )
+                fig.update_layout(title=f"{handler} {group} Specific Issues")
+                fig.update_xaxes(
+                    categoryorder="total descending",
+                    ticks="outside",
+                    tickson="boundaries",
+                )
+                fig.update_traces(
+                    hovertemplate="<br>".join(
+                        ["COUNT: %{y}", "ALARMTEXT: %{customdata[2]}"]
+                    )
+                )
+                return fig, {"display": "block"}, {"display": "block"}
+
+            if dropdown_value == "Handler Trend":
+                handler_number = click_data["points"][0]["curveNumber"]
+                handler = Handlers[handler_number]
+                week = click_data["points"][0]["x"]
+                statement=
+
+                return
+            if dropdown_value == "Alarm Trend":
+                print(click_data)
+                group_number = click_data["points"][0]["curveNumber"]
+
+                return
+        else:
+            return {}, {"display": "none"}, {"display": "block"}
+    else:
+        return {}, {"display": "none"}, {"display": "block"}
+    return
+    # if dropdown_value == "Handler Pareto":
+    #     ctx = dash.callback_context
+    #     trigger_id = ctx.triggered[0]["prop_id"].split(".")[0]
+    #     if trigger_id == "graph":
+    #         if click_data is not None:
+    #             handler = click_data["points"][0]["label"]
+    #             group_number = handler_label = click_data["points"][0]["curveNumber"]
+    #             group = Unique_Group[group_number]
+    #             drill_down_data = df[
+    #                 (df.HANDLERNAME == handler) & (df.GROUPID == group)
+    #             ]
+    #             # print(drill_down_data)
+    #             drill_down_data = drill_down_data[["ALID", "COUNT", "ALARMTEXT"]]
+    #             drill_down_data["ALID"] = drill_down_data["ALID"].astype(str)
+    #             fig = px.bar(drill_down_data, x="ALID", y="COUNT", color="ALID")
+    #             fig.update_layout(title=f"{handler} {group} Specific Issues")
+    #             fig.update_xaxes(
+    #                 categoryorder="total descending",
+    #                 ticks="outside",
+    #                 tickson="boundaries",
+    #             )
+    #             return fig, {"display": "block"}, {"display": "block"}
+    #         else:
+    #             return Plot1(), {"display": "none"}, {"display": "block"}
+    #     else:
+    #         return Plot1(), {"display": "none"}, {"display": "block"}
 
 
 # MULTIPLE CALLBACKS TRIGGERED ON CLICK, DRILL DOWN INTO EACH GRAPH
