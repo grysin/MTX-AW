@@ -1,12 +1,12 @@
 # MTX ALARM ANALYSIS
 
-from tracemalloc import start
 import cx_Oracle
 import os
 import csv
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import handler_kit_Tsense_calibrate_config as config
@@ -80,7 +80,7 @@ def set_time_decode(time):
 # the initial time (6 weeks back) in set time format
 sql_init_endtime = set_time_convert(init_endtime)
 sql_init_starttime = set_time_convert(init_starttime)
-print(sql_init_starttime, sql_init_endtime)
+# print(sql_init_starttime, sql_init_endtime)
 start_date = str(init_starttime.date())
 end_date = str(init_endtime.date())
 
@@ -314,19 +314,6 @@ app.layout = html.Div(
     ]
 )
 
-# CALLBACK THAT CHANGES GRAPH BASED ON DROPDOWN MENU
-# @app.callback(Output("Plot", "figure"), Input("dropdown", "value"))
-# def dropdown_update(dropdown_value):
-#     if dropdown_value == "Handler Pareto":
-#         return Plot1()
-#     if dropdown_value == "Alarm Pareto":
-#         return Plot2()
-#     if dropdown_value == "Handler Trend":
-#         return Plot3()
-#     if dropdown_value == "Alarm Trend":
-#         return Plot4()
-
-
 # CALLBACK THAT UPDATES GRAPHS BASED ON SELECTED DATE AND DROPDOWN SELECTION
 @app.callback(
     Output("Plot", "figure"),
@@ -375,6 +362,7 @@ def date_update(dropdown_value, date_start, date_end):
 def drilldown(click_data, n_clicks, dropdown_value):
     global start_date
     global end_date
+    global fig
     ctx = dash.callback_context
     trigger_id = ctx.triggered[0]["prop_id"].split(".")[0]
     if trigger_id == "Plot":
@@ -415,7 +403,7 @@ def drilldown(click_data, n_clicks, dropdown_value):
                     (df.HANDLERNAME == handler) & (df.GROUPID == group)
                 ]
                 drill_down_data["ALID"] = drill_down_data["ALID"].astype(str)
-                print(drill_down_data)
+                # print(drill_down_data)
                 fig = px.bar(
                     drill_down_data,
                     x="ALID",
@@ -440,50 +428,112 @@ def drilldown(click_data, n_clicks, dropdown_value):
                 handler_number = click_data["points"][0]["curveNumber"]
                 handler = Handlers[handler_number]
                 week = click_data["points"][0]["x"]
-                statement=
+                statement_dd = f"SELECT MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.ALID, COUNT(MTX_JAM_STAT_DATA.ALID) AS COUNT, MTX_JAM_STAT_ALARMINFO.ALARMTEXT FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_ALARMINFO ON MTX_JAM_STAT_ALARMINFO.ALID = MTX_JAM_STAT_DATA.ALID WHERE  MTX_JAM_STAT_DATA.HANDLERNAME='{handler}' AND MTX_JAM_STAT_DATA.SET_TIME >= {sql_init_starttime} AND MTX_JAM_STAT_DATA.SET_TIME <= {sql_init_endtime} GROUP BY MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.ALID, MTX_JAM_STAT_ALARMINFO.ALARMTEXT ORDER BY WEEK ASC"
+                sql_query = pd.read_sql_query(statement_dd, conn)
+                drill_down_data = pd.DataFrame(
+                    sql_query,
+                    columns=["WEEK", "ALID", "COUNT", "ALARMTEXT"],
+                )
+                weeks = drill_down_data["WEEK"].sort_values(ascending=True).unique()
 
-                return
+                num_weeks = int(max(weeks) - min(weeks)) + 2
+                codes = drill_down_data["ALID"].sort_values(ascending=True).unique()
+                plot_df = pd.DataFrame(columns=weeks)
+                for code in codes:
+                    Y = []
+                    for week in weeks:
+                        is_code = drill_down_data["ALID"] == code
+                        is_week = drill_down_data["WEEK"] == week
+                        count = drill_down_data["COUNT"][is_code & is_week]
+                        count = list(count)
+                        try:
+                            count = count[0]
+                        except IndexError:
+                            count = 0
+                        Y.append(count)
+                    plot_df.loc[code] = Y
+                # print(plot_df)
+                fig = plot_df.T.plot(
+                    labels={"value": "Count", "index": "Work Week"},
+                )
+                fig.update_layout(
+                    title=f"{handler} alarm trend from {start_date} to {end_date}"
+                )
+                fig.update_xaxes(nticks=num_weeks)
+
+                return fig, {"display": "block"}, {"display": "block"}
+
             if dropdown_value == "Alarm Trend":
-                print(click_data)
+
                 group_number = click_data["points"][0]["curveNumber"]
 
-                return
+                group = Unique_Group[group_number]
+
+                statement_dd = f"SELECT MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.HANDLERNAME, COUNT(MTX_JAM_STAT_ALARMINFO.GROUPID) AS COUNT FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_ALARMINFO ON MTX_JAM_STAT_ALARMINFO.ALID = MTX_JAM_STAT_DATA.ALID WHERE MTX_JAM_STAT_ALARMINFO.GROUPID = '{group}' AND MTX_JAM_STAT_DATA.SET_TIME >= {sql_init_starttime} AND MTX_JAM_STAT_DATA.SET_TIME <= {sql_init_endtime} GROUP BY MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_ALARMINFO.GROUPID ORDER BY WEEK ASC"
+                sql_query = pd.read_sql_query(statement_dd, conn)
+                drill_down_data = pd.DataFrame(
+                    sql_query,
+                    columns=["WEEK", "HANDLERNAME", "COUNT"],
+                )
+                weeks = drill_down_data["WEEK"].sort_values(ascending=True).unique()
+                num_weeks = int(max(weeks) - min(weeks)) + 2
+
+                handlers = (
+                    drill_down_data["HANDLERNAME"].sort_values(ascending=True).unique()
+                )
+                plot_df = pd.DataFrame(columns=weeks)
+                for handler in handlers:
+                    Y = []
+                    for week in weeks:
+                        is_handler = drill_down_data["HANDLERNAME"] == handler
+                        is_week = drill_down_data["WEEK"] == week
+                        count = count = drill_down_data["COUNT"][is_handler & is_week]
+                        count = list(count)
+                        try:
+                            count = count[0]
+                        except IndexError:
+                            count = 0
+                        Y.append(count)
+                    plot_df.loc[handler] = Y
+
+                fig = plot_df.T.plot(labels={"value": "Count", "index": "Work Week"})
+                fig.update_layout(
+                    title=f"{group} trend on handlers from {start_date} to {end_date}"
+                )
+                fig.update_xaxes(nticks=num_weeks)
+
+                return fig, {"display": "block"}, {"display": "block"}
         else:
             return {}, {"display": "none"}, {"display": "block"}
     else:
         return {}, {"display": "none"}, {"display": "block"}
     return
-    # if dropdown_value == "Handler Pareto":
-    #     ctx = dash.callback_context
-    #     trigger_id = ctx.triggered[0]["prop_id"].split(".")[0]
-    #     if trigger_id == "graph":
-    #         if click_data is not None:
-    #             handler = click_data["points"][0]["label"]
-    #             group_number = handler_label = click_data["points"][0]["curveNumber"]
-    #             group = Unique_Group[group_number]
-    #             drill_down_data = df[
-    #                 (df.HANDLERNAME == handler) & (df.GROUPID == group)
-    #             ]
-    #             # print(drill_down_data)
-    #             drill_down_data = drill_down_data[["ALID", "COUNT", "ALARMTEXT"]]
-    #             drill_down_data["ALID"] = drill_down_data["ALID"].astype(str)
-    #             fig = px.bar(drill_down_data, x="ALID", y="COUNT", color="ALID")
-    #             fig.update_layout(title=f"{handler} {group} Specific Issues")
-    #             fig.update_xaxes(
-    #                 categoryorder="total descending",
-    #                 ticks="outside",
-    #                 tickson="boundaries",
-    #             )
-    #             return fig, {"display": "block"}, {"display": "block"}
-    #         else:
-    #             return Plot1(), {"display": "none"}, {"display": "block"}
-    #     else:
-    #         return Plot1(), {"display": "none"}, {"display": "block"}
 
 
-# MULTIPLE CALLBACKS TRIGGERED ON CLICK, DRILL DOWN INTO EACH GRAPH
+# @app.callback(
+#     Output("download_content", "data"),
+#     Input("download_button", "n_clicks"),
+#     Input("dropdown", "value"),
+#     prevent_initial_call=True,
+# )
+# def download(n_clicks, dropdown_value):
+#     if dropdown_value == "Handler Pareto":
+#         figure = Plot1()
 
-# CALLBACK THAT ACTS AS A BACK BUTTON FROM DRILL DOWN
+#     if dropdown_value == "Alarm Pareto":
+#         figure = Plot2()
+
+#     if dropdown_value == "Handler Trend":
+#         figure = Plot3()
+
+#     if dropdown_value == "Alarm Trend":
+#         figure = Plot4()
+
+#     figure = figure.to_dict()
+#     print(figure)
+
+#     return dict(content="Hello world!", filename="hello.txt")
+
 
 # CALLBACK THAT SAVES DATA CURRENTLY DISPLAYED ON THE GRAPH INTO A EXCEL FILE
 
