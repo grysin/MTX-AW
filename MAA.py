@@ -19,6 +19,7 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 from dash import html
 from dash.dependencies import Input, Output
+import openpyxl
 
 # END OF IMPORTS #
 try:
@@ -510,29 +511,48 @@ def drilldown(click_data, n_clicks, dropdown_value):
     return
 
 
-# @app.callback(
-#     Output("download_content", "data"),
-#     Input("download_button", "n_clicks"),
-#     Input("dropdown", "value"),
-#     prevent_initial_call=True,
-# )
-# def download(n_clicks, dropdown_value):
-#     if dropdown_value == "Handler Pareto":
-#         figure = Plot1()
+@app.callback(
+    Output("download_content", "data"),
+    Input("download_button", "n_clicks"),
+    prevent_initial_call=True,
+)
+def download(n_clicks):
+    global sql_init_endtime
+    global sql_init_starttime
+    global start_date
+    global end_date
 
-#     if dropdown_value == "Alarm Pareto":
-#         figure = Plot2()
+    # build a dictionary
+    statement_download = f"SELECT  MTX_JAM_STAT_DATA.HANDLERNAME, MTX_JAM_STAT_DATA.KIT, MTX_JAM_STAT_DATA.TEMPERATURE, MTX_JAM_STAT_ALARMINFO.ALID, MTX_JAM_STAT_ALARMINFO.ALARMTEXT, MTX_JAM_STAT_ALARMINFO.GROUPID, MTX_JAM_STAT_ALARMINFO.SUBGROUPID, MTX_JAM_STAT_DATA.SET_READABLE AS TIME, MTX_JAM_STAT_DATA.MONTH, MTX_JAM_STAT_DATA.WEEK, MTX_JAM_STAT_DATA.YEAR FROM MTX_JAM_STAT_DATA LEFT JOIN MTX_JAM_STAT_ALARMINFO ON MTX_JAM_STAT_ALARMINFO.ALID = MTX_JAM_STAT_DATA.ALID WHERE MTX_JAM_STAT_DATA.SET_TIME >= {sql_init_starttime} AND MTX_JAM_STAT_DATA.SET_TIME <={sql_init_endtime}"
+    sql_query = pd.read_sql_query(statement_download, conn)
+    download_dataframe = pd.DataFrame(
+        sql_query,
+        columns=[
+            "HANDLERNAME",
+            "KIT",
+            "TEMPERATURE",
+            "ALID",
+            "ALARMTEXT",
+            "GROUPID",
+            "SUBGROUPID",
+            "TIME",
+            "MONTH",
+            "WEEK",
+            "YEAR",
+        ],
+    )
 
-#     if dropdown_value == "Handler Trend":
-#         figure = Plot3()
+    start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
+    start_title = datetime.strftime(start_datetime, "%b%d")
 
-#     if dropdown_value == "Alarm Trend":
-#         figure = Plot4()
+    end_datetime = datetime.strptime(end_date, "%Y-%m-%d")
+    end_title = datetime.strftime(end_datetime, "%b%d")
 
-#     figure = figure.to_dict()
-#     print(figure)
+    filename = start_title + "-" + end_title + "_MTX_JAM_STATS" + ".xlsx"
 
-#     return dict(content="Hello world!", filename="hello.txt")
+    return dcc.send_data_frame(
+        download_dataframe.to_excel, filename, sheet_name="Alarms"
+    )
 
 
 # CALLBACK THAT SAVES DATA CURRENTLY DISPLAYED ON THE GRAPH INTO A EXCEL FILE
